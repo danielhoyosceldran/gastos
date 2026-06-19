@@ -1,0 +1,31 @@
+@use '../../styles/variables' as *;
+
+.export-page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+  max-width: 480px;
+
+  &__title {
+    font-size: $font-h1;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+    background-color: var(--bg-surface-1);
+    border: 1px solid var(--border);
+    padding: $space-6;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-3;
+    flex-wrap: wrap;
+    padding-top: $space-2;
+  }
+}

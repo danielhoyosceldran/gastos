@@ -1,0 +1,37 @@
+@use '../../styles/variables' as *;
+
+.color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+
+  &__none {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-surface-2);
+    color: var(--text-secondary);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--active {
+      border-color: var(--text-primary);
+      color: var(--text-primary);
+    }
+  }
+
+  &__swatch {
+    width: 28px;
+    height: 28px;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+
+    &--active {
+      border-color: var(--text-primary);
+      outline: 1px solid var(--bg-surface-1);
+      outline-offset: -3px;
+    }
+  }
+}

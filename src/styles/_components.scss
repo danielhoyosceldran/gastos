@@ -1,0 +1,124 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ── Buttons ────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  font-size: $font-body;
+  font-weight: 500;
+  font-family: inherit;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background-color: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+
+    &:hover:not(:disabled) { background-color: var(--color-primary-dark); border-color: var(--color-primary-dark); }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border);
+
+    &:hover:not(:disabled) { color: var(--text-primary); border-color: var(--text-secondary); }
+  }
+
+  &--danger {
+    background-color: var(--toast-error-icon);
+    color: #fff;
+    border-color: var(--toast-error-icon);
+
+    &:hover:not(:disabled) { background-color: var(--toast-error-text); border-color: var(--toast-error-text); }
+  }
+
+  &--sm {
+    padding: $space-1 $space-3;
+    font-size: $font-small;
+  }
+
+  &--icon {
+    padding: $space-1;
+    width: 28px;
+    height: 28px;
+    font-size: $font-small;
+  }
+}
+
+// ── Form fields ────────────────────────────────────────────────
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  &__label {
+    font-size: $font-small;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: $font-body;
+    font-family: inherit;
+    padding: $space-2 $space-3;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &:focus { border-color: var(--color-primary); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+  }
+
+  &__hint {
+    font-size: $font-small;
+    color: var(--text-secondary);
+  }
+
+  &__error {
+    font-size: $font-small;
+    color: var(--toast-error-text);
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-4;
+
+  @include sm {
+    grid-template-columns: 1fr 1fr;
+  }
+}

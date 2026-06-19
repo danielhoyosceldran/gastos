@@ -1,0 +1,103 @@
+@use '../../styles/variables' as *;
+
+.login-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-base);
+  padding: $space-5;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border);
+  padding: $space-7 $space-6;
+}
+
+.login-title {
+  font-size: $font-h1;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 $space-2;
+}
+
+.login-subtitle {
+  font-size: $font-body;
+  color: var(--text-secondary);
+  margin: 0 0 $space-6;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  &__label {
+    font-size: $font-small;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__input {
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: $font-body;
+    font-family: inherit;
+    padding: $space-3 $space-4;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: var(--color-primary);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.login-error {
+  font-size: $font-small;
+  color: var(--toast-error-text);
+  background-color: var(--toast-error-bg);
+  padding: $space-3 $space-4;
+  margin: 0;
+}
+
+.login-btn {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  font-size: $font-body;
+  font-weight: 600;
+  font-family: inherit;
+  padding: $space-3 $space-4;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  margin-top: $space-2;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

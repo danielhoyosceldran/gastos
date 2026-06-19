@@ -1,0 +1,262 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { expensesService } from '../../services/supabase/expenses.service';
+import { budgetsService } from '../../services/supabase/budgets.service';
+import type { Expense, CreateExpenseDTO } from '../../types/expense.types';
+import type { Budget, BudgetMonth } from '../../types/budget.types';
+import { ExpenseForm } from '../Expenses/ExpenseForm';
+import { ConfirmDialog } from '../../components/ConfirmDialog/ConfirmDialog';
+import { toast } from '../../store/toast.store';
+import { useAuthStore } from '../../store/auth.store';
+import { formatCurrency, formatDate } from '../../lib/format';
+import './DashboardPage.scss';
+
+function getMonthLabel(year: number, month: number, language: string): string {
+  return new Intl.DateTimeFormat(language, { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
+}
+
+function toMonthStr(year: number, month: number): string {
+  return `${year}-${String(month).padStart(2, '0')}`;
+}
+
+function isBudgetActive(budget: Budget, year: number, month: number): boolean {
+  if (budget.budget_type === 'total') return true;
+  if (budget.budget_type === 'months') {
+    return (budget.months ?? []).some((m: BudgetMonth) => m.year === year && m.month === month);
+  }
+  // range
+  const cur = toMonthStr(year, month);
+  const start = budget.starts_month ?? '';
+  const end = budget.ends_month ?? '';
+  if (start && cur < start) return false;
+  if (end && cur > end) return false;
+  return true;
+}
+
+export function DashboardPage() {
+  const { t } = useTranslation();
+  const { profile } = useAuthStore();
+
+  const now = new Date();
+  const [year, setYear] = useState(now.getFullYear());
+  const [month, setMonth] = useState(now.getMonth() + 1);
+
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<Expense | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Expense | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const [activeBudgets, setActiveBudgets] = useState<Budget[]>([]);
+  const [budgetsLoading, setBudgetsLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try { setExpenses(await expensesService.getByMonth(year, month)); }
+    catch { toast.error(t('common.error_load')); }
+    finally { setLoading(false); }
+  }, [year, month, t]);
+
+  const loadBudgets = useCallback(async () => {
+    setBudgetsLoading(true);
+    try {
+      const all = await budgetsService.getAll();
+      const active = all.filter((b) => isBudgetActive(b, year, month));
+      const withProgress = await Promise.all(
+        active.map(async (b) => {
+          try {
+            const spent = await budgetsService.getProgress(b.id, year, month);
+            return { ...b, spent };
+          } catch {
+            return { ...b, spent: 0 };
+          }
+        })
+      );
+      setActiveBudgets(withProgress);
+    } catch { /* silent — budgets are secondary */ }
+    finally { setBudgetsLoading(false); }
+  }, [year, month]);
+
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => { loadBudgets(); }, [loadBudgets]);
+
+  function prevMonth() {
+    if (month === 1) { setYear((y) => y - 1); setMonth(12); }
+    else setMonth((m) => m - 1);
+  }
+  function nextMonth() {
+    if (month === 12) { setYear((y) => y + 1); setMonth(1); }
+    else setMonth((m) => m + 1);
+  }
+
+  const lang = profile?.language ?? 'en';
+  const currency = profile?.currency ?? 'EUR';
+
+  const inCurrency = expenses.filter((e) => e.currency === currency);
+  const totalSpent = inCurrency
+    .filter((e) => e.type === 'expense').reduce((s, e) => s + e.amount, 0)
+    - inCurrency.filter((e) => e.type === 'refund').reduce((s, e) => s + e.amount, 0);
+  const totalIncome = inCurrency.filter((e) => e.type === 'income').reduce((s, e) => s + e.amount, 0);
+  const netBalance = totalIncome - totalSpent;
+
+  function openAdd() { setEditTarget(null); setFormOpen(true); }
+  function openEdit(e: Expense) { setEditTarget(e); setFormOpen(true); }
+
+  async function handleSave(dto: CreateExpenseDTO, id?: string) {
+    setSaving(true);
+    try {
+      if (id) {
+        const updated = await expensesService.update(id, dto);
+        setExpenses((prev) => prev.map((e) => (e.id === id ? updated : e)));
+      } else {
+        const created = await expensesService.create(dto);
+        const d = new Date(created.date);
+        if (d.getFullYear() === year && d.getMonth() + 1 === month) {
+          setExpenses((prev) => [created, ...prev]);
+        }
+      }
+      toast.success(t('common.saved'));
+      setFormOpen(false);
+    } catch { toast.error(t('common.error_save')); }
+    finally { setSaving(false); }
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleteLoading(true);
+    try {
+      await expensesService.delete(deleteTarget.id);
+      setExpenses((prev) => prev.filter((e) => e.id !== deleteTarget.id));
+      toast.success(t('common.deleted'));
+      setDeleteTarget(null);
+    } catch { toast.error(t('common.error_delete')); }
+    finally { setDeleteLoading(false); }
+  }
+
+  function rowColor(type: Expense['type']) {
+    if (type === 'income') return 'var(--toast-success-text)';
+    if (type === 'refund') return 'var(--toast-warning-text)';
+    return 'var(--text-primary)';
+  }
+
+  function rowSign(type: Expense['type']) {
+    return type === 'income' ? '+' : type === 'refund' ? '±' : '-';
+  }
+
+  return (
+    <div className="dashboard">
+      {/* Month nav */}
+      <div className="dashboard__month-nav">
+        <button className="btn btn--ghost btn--icon" onClick={prevMonth} aria-label={t('dashboard.prev_month')}>‹</button>
+        <span className="dashboard__month-label">{getMonthLabel(year, month, lang)}</span>
+        <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}>›</button>
+      </div>
+
+      {/* Totals */}
+      <div className="dashboard__totals">
+        <div className="dashboard__total-row">
+          <span className="dashboard__total-label">{t('dashboard.total_spent')}</span>
+          <span className="dashboard__total-value dashboard__total-value--spent">
+            {formatCurrency(totalSpent, currency, lang)}
+          </span>
+        </div>
+        <div className="dashboard__total-row">
+          <span className="dashboard__total-label">{t('dashboard.total_income')}</span>
+          <span className="dashboard__total-value dashboard__total-value--income">
+            {formatCurrency(totalIncome, currency, lang)}
+          </span>
+        </div>
+        <div className="dashboard__total-row dashboard__total-row--net">
+          <span className="dashboard__total-label">{t('dashboard.net_balance')}</span>
+          <span className={`dashboard__total-value ${netBalance >= 0 ? 'dashboard__total-value--income' : 'dashboard__total-value--spent'}`}>
+            {netBalance >= 0 ? '+' : ''}{formatCurrency(netBalance, currency, lang)}
+          </span>
+        </div>
+      </div>
+
+      {/* Active budgets */}
+      {!budgetsLoading && activeBudgets.length > 0 && (
+        <div className="dashboard__section">
+          <div className="dashboard__section-header">
+            <h2 className="dashboard__section-title">{t('dashboard.active_budgets')}</h2>
+          </div>
+          <div className="dashboard__budgets">
+            {activeBudgets.map((b) => {
+              const spent = b.spent ?? 0;
+              const pct = b.amount > 0 ? Math.min((spent / b.amount) * 100, 100) : 0;
+              const over = spent > b.amount;
+              return (
+                <div key={b.id} className="dashboard__budget-item">
+                  <div className="dashboard__budget-top">
+                    <span className="dashboard__budget-name">{b.name}</span>
+                    <span className={`dashboard__budget-amounts${over ? ' dashboard__budget-amounts--over' : ''}`}>
+                      {formatCurrency(spent, b.currency, lang)}
+                      <span className="dashboard__budget-limit"> / {formatCurrency(b.amount, b.currency, lang)}</span>
+                    </span>
+                  </div>
+                  <div className="dashboard__budget-bar">
+                    <div
+                      className={`dashboard__budget-fill${over ? ' dashboard__budget-fill--over' : ''}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Expenses */}
+      <div className="dashboard__section">
+        <div className="dashboard__section-header">
+          <h2 className="dashboard__section-title">{t('nav.expenses')}</h2>
+          <button className="btn btn--primary btn--sm" onClick={openAdd}>{t('expenses.add')}</button>
+        </div>
+
+        {loading ? (
+          <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>{t('common.loading')}</p>
+        ) : expenses.length === 0 ? (
+          <div className="dashboard__empty">
+            <p>{t('dashboard.no_expenses')}</p>
+            <button className="btn btn--primary btn--sm" onClick={openAdd}>{t('expenses.add')}</button>
+          </div>
+        ) : (
+          <div className="dashboard__expense-list">
+            {expenses.map((exp) => (
+              <div key={exp.id} className="dashboard__expense-row" onClick={() => openEdit(exp)}>
+                <div className="dashboard__expense-date">{formatDate(exp.date, lang)}</div>
+                <div className="dashboard__expense-desc">
+                  {exp.description ?? <span style={{ color: 'var(--text-disabled)' }}>{t(`expenses.type_${exp.type}`)}</span>}
+                </div>
+                <div className="dashboard__expense-amount" style={{ color: rowColor(exp.type) }}>
+                  {rowSign(exp.type)}{formatCurrency(exp.amount, exp.currency, lang)}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <ExpenseForm
+        open={formOpen}
+        expense={editTarget}
+        onClose={() => setFormOpen(false)}
+        onSave={handleSave}
+        saving={saving}
+      />
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title={t('common.delete_confirm_title')}
+        message={t('expenses.delete_warning')}
+        confirmLabel={t('common.delete')}
+        loading={deleteLoading}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+    </div>
+  );
+}

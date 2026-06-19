@@ -1,0 +1,182 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+$sidebar-width: 220px;
+$bottom-nav-height: 60px;
+
+.app-layout {
+  display: flex;
+  min-height: 100dvh;
+  background-color: var(--bg-base);
+}
+
+// ── Sidebar (desktop) ──────────────────────────────────────────
+.sidebar {
+  display: none;
+
+  @include md {
+    display: flex;
+    flex-direction: column;
+    width: $sidebar-width;
+    min-height: 100dvh;
+    background-color: var(--bg-surface-1);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-5 $space-5 $space-4;
+    border-bottom: 1px solid var(--border);
+  }
+
+  &__logo {
+    width: 28px;
+    height: 28px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: $font-h3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: $font-h3;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  &__nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: $space-4 $space-3;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-3 $space-4;
+    color: var(--text-secondary);
+    font-size: $font-body;
+    font-weight: 500;
+    transition: background-color 0.1s, color 0.1s;
+
+    &:hover {
+      background-color: var(--bg-surface-2);
+      color: var(--text-primary);
+    }
+
+    &--active {
+      background-color: var(--bg-surface-2);
+      color: var(--color-primary);
+    }
+  }
+
+  &__icon {
+    font-size: $font-h3;
+    width: 20px;
+    text-align: center;
+  }
+
+  &__footer {
+    padding: $space-4 $space-3;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__theme-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--text-secondary);
+    font-size: $font-h3;
+    transition: color 0.1s;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  &__signout-btn {
+    font-size: $font-small;
+    color: var(--text-secondary);
+    text-align: left;
+    padding: $space-2 $space-4;
+    transition: color 0.1s;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+}
+
+// ── Main content ──────────────────────────────────────────────
+.app-main {
+  flex: 1;
+  padding: $space-5;
+  padding-bottom: calc(#{$bottom-nav-height} + #{$space-5});
+
+  @include md {
+    margin-left: $sidebar-width;
+    padding-bottom: $space-5;
+  }
+}
+
+// ── Bottom nav (mobile) ──────────────────────────────────────
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: $bottom-nav-height;
+  background-color: var(--bg-surface-1);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 100;
+
+  @include md {
+    display: none;
+  }
+
+  &__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--text-secondary);
+    font-size: $font-small;
+    transition: color 0.1s;
+
+    &--active {
+      color: var(--color-primary);
+    }
+  }
+
+  &__icon {
+    font-size: $font-h2;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+}

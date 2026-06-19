@@ -1,0 +1,49 @@
+@use '../../styles/variables' as *;
+
+.waiting-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-base);
+  padding: $space-5;
+}
+
+.waiting-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border);
+  padding: $space-7 $space-6;
+  text-align: center;
+}
+
+.waiting-title {
+  font-size: $font-h1;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 $space-4;
+}
+
+.waiting-body {
+  font-size: $font-body;
+  color: var(--text-secondary);
+  margin: 0 0 $space-6;
+  line-height: 1.6;
+}
+
+.waiting-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: $font-body;
+  font-family: inherit;
+  padding: $space-3 $space-5;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+
+  &:hover {
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+  }
+}

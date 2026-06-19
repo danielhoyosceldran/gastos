@@ -1,0 +1,62 @@
+@use '../../styles/variables' as *;
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-5;
+}
+
+.modal {
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-5 $space-5 $space-4;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: $font-h2;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  &__close {
+    color: var(--text-secondary);
+    font-size: $font-body;
+    padding: $space-1;
+    line-height: 1;
+
+    &:hover { color: var(--text-primary); }
+  }
+
+  &__body {
+    padding: $space-5;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  &__footer {
+    padding: $space-4 $space-5;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    flex-shrink: 0;
+  }
+}

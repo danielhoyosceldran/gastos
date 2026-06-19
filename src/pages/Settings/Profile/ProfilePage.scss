@@ -1,0 +1,116 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.profile-section {
+  &__title {
+    font-size: $font-small;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 $space-3;
+  }
+}
+
+.profile-row {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  padding: $space-3 0;
+  border-bottom: 1px solid var(--border);
+
+  @include sm {
+    flex-direction: row;
+    align-items: center;
+    gap: $space-4;
+  }
+
+  &__label {
+    font-size: $font-small;
+    font-weight: 500;
+    color: var(--text-secondary);
+
+    @include sm {
+      width: 80px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__value {
+    font-size: $font-body;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+}
+
+.profile-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.profile-option {
+  padding: $space-2 $space-4;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface-2);
+  color: var(--text-secondary);
+  font-size: $font-body;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.12s;
+
+  &:hover:not(:disabled) {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  &--active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.profile-color-option {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface-2);
+  color: var(--text-secondary);
+  font-size: $font-body;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.12s;
+
+  &:hover:not(:disabled) {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  &--active {
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    background-color: var(--bg-surface-1);
+  }
+
+  &__swatch {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}

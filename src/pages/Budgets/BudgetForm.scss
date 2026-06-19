@@ -1,0 +1,78 @@
+@use '../../styles/variables' as *;
+
+.budget-form {
+  &__currency {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    padding: $space-2 $space-3;
+    background-color: var(--bg-surface-3);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: $font-body;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__type-row {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__type-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: $space-2 $space-3;
+    border: 1px solid var(--border);
+    background-color: var(--bg-surface-2);
+    color: var(--text-secondary);
+    font-size: $font-small;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+
+    &--active {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+  }
+
+  &__months-add {
+    display: flex;
+    gap: $space-2;
+    align-items: center;
+    margin-bottom: $space-2;
+
+    .field__input { flex: 1; }
+  }
+
+  &__months-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+
+  &__month-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: 3px $space-3;
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    font-size: $font-small;
+    color: var(--text-primary);
+
+    button {
+      color: var(--text-secondary);
+      font-size: 10px;
+      cursor: pointer;
+      line-height: 1;
+
+      &:hover { color: var(--text-primary); }
+    }
+  }
+}

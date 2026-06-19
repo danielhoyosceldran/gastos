@@ -1,0 +1,99 @@
+@use '../../styles/variables' as *;
+
+.expense-form {
+  &__type-row {
+    display: flex;
+    gap: $space-2;
+  }
+
+  &__type-btn {
+    flex: 1;
+    padding: $space-2 $space-3;
+    border: 1px solid var(--border);
+    background-color: var(--bg-surface-2);
+    color: var(--text-secondary);
+    font-size: $font-small;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.12s;
+
+    &--active {
+      &.expense-form__type-btn--expense {
+        background-color: var(--toast-error-bg);
+        border-color: var(--toast-error-icon);
+        color: var(--toast-error-text);
+      }
+      &.expense-form__type-btn--income {
+        background-color: var(--toast-success-bg);
+        border-color: var(--toast-success-icon);
+        color: var(--toast-success-text);
+      }
+      &.expense-form__type-btn--refund {
+        background-color: var(--toast-warning-bg);
+        border-color: var(--toast-warning-icon);
+        color: var(--toast-warning-text);
+      }
+    }
+  }
+
+  &__currency {
+    height: 100%;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    padding: $space-2 $space-3;
+    background-color: var(--bg-surface-3);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: $font-body;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__tags {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    padding: $space-3;
+    background-color: var(--bg-surface-2);
+  }
+
+  &__tag-group-name {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-disabled);
+    margin-bottom: $space-2;
+  }
+
+  &__tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: 3px $space-3;
+    border: 1px solid var(--border);
+    background-color: var(--bg-surface-1);
+    color: var(--text-secondary);
+    font-size: $font-small;
+    cursor: pointer;
+    transition: all 0.1s;
+    user-select: none;
+
+    &--active {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+  }
+}

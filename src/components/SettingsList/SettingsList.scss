@@ -1,0 +1,101 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.settings-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  flex-wrap: wrap;
+}
+
+.settings-page__title {
+  font-size: $font-h1;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: $space-2;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--bg-surface-1);
+
+  &:last-child { border-bottom: none; }
+
+  &--sub {
+    padding-left: calc(#{$space-4} + 20px);
+    background-color: var(--bg-surface-2);
+  }
+
+  &--sub2 {
+    padding-left: calc(#{$space-4} + 40px);
+    background-color: var(--bg-base);
+  }
+
+  &__color {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  &__name {
+    flex: 1;
+    font-size: $font-body;
+    color: var(--text-primary);
+    min-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__default-badge {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  @include sm {
+    flex-wrap: nowrap;
+
+    &__name { min-width: 0; }
+  }
+}
+
+.settings-empty {
+  padding: $space-7 $space-5;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: $font-body;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface-1);
+}

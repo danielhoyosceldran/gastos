@@ -1,0 +1,63 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.settings-layout {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+
+  @include md {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: $space-7;
+  }
+}
+
+.settings-nav {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+
+  @include md {
+    border: none;
+    border-right: 1px solid var(--border);
+    padding-right: $space-5;
+    min-width: 160px;
+  }
+
+  &__link {
+    font-size: $font-body;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: $space-3 $space-4;
+    border-bottom: 1px solid var(--border);
+    border-left: 3px solid transparent;
+    transition: color 0.12s, background-color 0.12s, border-color 0.12s;
+    background-color: var(--bg-surface-1);
+
+    &:last-child { border-bottom: none; }
+    &:hover { color: var(--text-primary); background-color: var(--bg-surface-2); }
+
+    &--active {
+      color: var(--color-primary);
+      border-left-color: var(--color-primary);
+      background-color: var(--bg-surface-2);
+    }
+
+    @include md {
+      border-bottom: none;
+      padding: $space-2 $space-4;
+      background-color: transparent;
+
+      &:hover { background-color: var(--bg-surface-2); }
+
+      &--active { background-color: var(--bg-surface-2); }
+    }
+  }
+}
+
+.settings-content {
+  flex: 1;
+  min-width: 0;
+}

@@ -1,0 +1,35 @@
+// Typography
+$font-family: 'DM Sans', sans-serif;
+$font-display: 32px;
+$font-h1: 24px;
+$font-h2: 20px;
+$font-h3: 16px;
+$font-body: 14px;
+$font-small: 12px;
+
+// Borders
+$border-radius: 0;
+$border-width: 1px;
+
+// Spacing scale
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 24px;
+$space-6: 32px;
+$space-7: 48px;
+$space-8: 64px;
+
+// Primary color options (set via CSS custom properties at runtime)
+// blue: #4F88DB / #7AAAE5 / #2D64B5
+// green: #4A7C6F / #6B9E8F / #2E5C51
+// red: #9B4A4A / #BF6B6B / #7A2E2E
+
+// Chart palette (20 colors, max contrast between adjacent)
+$chart-colors: (
+  '#F94144', '#F3722C', '#F8961E', '#F9C74F', '#E9D8A6',
+  '#90BE6D', '#43AA8B', '#0A9396', '#005F73', '#577590',
+  '#277DA1', '#CA6702', '#BB3E03', '#AE2012', '#9B2226',
+  '#656D4A', '#414833', '#936639', '#A68A64', '#001219'
+);

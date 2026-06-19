@@ -1,0 +1,208 @@
+@use '../../styles/variables' as *;
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+  max-width: 720px;
+}
+
+// ── Month nav ────────────────────────────────────────────────
+.dashboard__month-nav {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.dashboard__month-label {
+  font-size: $font-h2;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+// ── Totals ────────────────────────────────────────────────────
+.dashboard__totals {
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border);
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.dashboard__total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+
+  &--net {
+    padding-top: $space-3;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.dashboard__total-label {
+  font-size: $font-body;
+  color: var(--text-secondary);
+}
+
+.dashboard__total-value {
+  font-size: $font-h2;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+
+  &--spent  { color: var(--toast-error-text); }
+  &--income { color: var(--toast-success-text); }
+}
+
+// ── Sections ──────────────────────────────────────────────────
+.dashboard__section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.dashboard__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+}
+
+.dashboard__section-title {
+  font-size: $font-h3;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+// ── Budget mini-cards ─────────────────────────────────────────
+.dashboard__budgets {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.dashboard__budget-item {
+  background-color: var(--bg-surface-1);
+  border: 1px solid var(--border);
+  padding: $space-3 $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.dashboard__budget-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $space-3;
+}
+
+.dashboard__budget-name {
+  font-size: $font-body;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.dashboard__budget-amounts {
+  font-size: $font-body;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &--over { color: var(--toast-error-text); }
+}
+
+.dashboard__budget-limit {
+  font-size: $font-small;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.dashboard__budget-bar {
+  height: 5px;
+  background-color: var(--bg-surface-3);
+  width: 100%;
+  overflow: hidden;
+}
+
+.dashboard__budget-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease;
+
+  &--over { background-color: var(--toast-error-icon); }
+}
+
+// ── Expense list ──────────────────────────────────────────────
+.dashboard__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-6 $space-5;
+  border: 1px solid var(--border);
+  background-color: var(--bg-surface-1);
+  color: var(--text-secondary);
+  font-size: $font-body;
+  text-align: center;
+}
+
+.dashboard__expense-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+}
+
+.dashboard__expense-row {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--bg-surface-1);
+  cursor: pointer;
+  transition: background-color 0.1s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background-color: var(--bg-surface-2); }
+}
+
+.dashboard__expense-date {
+  font-size: $font-small;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.dashboard__expense-desc {
+  flex: 1;
+  font-size: $font-body;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard__expense-amount {
+  font-size: $font-body;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
