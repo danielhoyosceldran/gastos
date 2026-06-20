@@ -16,8 +16,9 @@ export function LoginPage() {
     setLoading(true);
     try {
       await signIn(email, password);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('auth.error_generic'));
+    } catch {
+      // Don't surface the provider's raw error text; show a generic message.
+      setError(t('auth.error_generic'));
     } finally {
       setLoading(false);
     }
