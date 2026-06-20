@@ -13,24 +13,38 @@ STABLE
 SECURITY DEFINER
 SET search_path = public
 AS $$
+  WITH RECURSIVE
+  -- Resolve each category to its top-level ancestor by walking parent_id up
+  cat_root AS (
+    -- Base: top-level categories are their own root
+    SELECT id, parent_id, name, id AS root_id, name AS root_name
+    FROM categories
+    WHERE parent_id IS NULL
+
+    UNION ALL
+
+    -- Recurse: children inherit the root from their parent
+    SELECT c.id, c.parent_id, c.name, cr.root_id, cr.root_name
+    FROM categories c
+    JOIN cat_root cr ON c.parent_id = cr.id
+  )
   SELECT * FROM (
     -- category: rollup subcategories to top-level ancestor
     SELECT
-      COALESCE(root.id, c.id)                          AS dimension_id,
-      COALESCE(root.name, c.name)                      AS name,
+      cr.root_id                                       AS dimension_id,
+      cr.root_name                                     AS name,
       SUM(CASE WHEN e.type = 'expense' THEN e.amount
                WHEN e.type = 'refund'  THEN -e.amount
                ELSE 0 END)                             AS total
     FROM expenses e
-    JOIN categories c ON c.id = e.category_id
-    LEFT JOIN categories root ON root.id = c.root_id
+    JOIN cat_root cr ON cr.id = e.category_id
     WHERE p_dimension = 'category'
       AND e.user_id   = auth.uid()
       AND e.currency  = p_currency
       AND e.date     >= p_from
       AND e.date     <= p_to
       AND e.type     != 'income'
-    GROUP BY COALESCE(root.id, c.id), COALESCE(root.name, c.name)
+    GROUP BY cr.root_id, cr.root_name
 
     UNION ALL
 

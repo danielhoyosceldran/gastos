@@ -15,6 +15,7 @@ import { ProjectsPage } from './pages/Settings/Projects/ProjectsPage';
 import { ProfilePage } from './pages/Settings/Profile/ProfilePage';
 import { ExportPage } from './pages/Export/ExportPage';
 import { AnalyticsPage } from './pages/Analytics/AnalyticsPage';
+import { AddExpensePage } from './pages/Expenses/AddExpensePage';
 import { ToastContainer } from './components/Toast/ToastContainer';
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
+          <Route path="expenses/new" element={<AddExpensePage />} />
+          <Route path="expenses/:id/edit" element={<AddExpensePage />} />
           <Route path="budgets" element={<BudgetsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="settings" element={<SettingsPage />}>

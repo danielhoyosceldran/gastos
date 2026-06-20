@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { expensesService } from '../../services/supabase/expenses.service';
 import { budgetsService } from '../../services/supabase/budgets.service';
-import type { Expense, CreateExpenseDTO } from '../../types/expense.types';
+import type { Expense } from '../../types/expense.types';
 import type { Budget, BudgetMonth } from '../../types/budget.types';
-import { ExpenseForm } from '../Expenses/ExpenseForm';
 import { ConfirmDialog } from '../../components/ConfirmDialog/ConfirmDialog';
 import { toast } from '../../store/toast.store';
 import { useAuthStore } from '../../store/auth.store';
@@ -39,6 +39,7 @@ export function DashboardPage() {
   const { t } = useTranslation();
   const { profile } = useAuthStore();
   const fd = useExpenseFormData();
+  const navigate = useNavigate();
 
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -46,9 +47,6 @@ export function DashboardPage() {
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
-  const [formOpen, setFormOpen] = useState(false);
-  const [editTarget, setEditTarget] = useState<Expense | null>(null);
-  const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Expense | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -104,27 +102,8 @@ export function DashboardPage() {
   const totalIncome = inCurrency.filter((e) => e.type === 'income').reduce((s, e) => s + e.amount, 0);
   const netBalance = totalIncome - totalSpent;
 
-  function openAdd() { setEditTarget(null); setFormOpen(true); }
-  function openEdit(e: Expense) { setEditTarget(e); setFormOpen(true); }
-
-  async function handleSave(dto: CreateExpenseDTO, id?: string) {
-    setSaving(true);
-    try {
-      if (id) {
-        const updated = await expensesService.update(id, dto);
-        setExpenses((prev) => prev.map((e) => (e.id === id ? updated : e)));
-      } else {
-        const created = await expensesService.create(dto);
-        const d = new Date(created.date);
-        if (d.getFullYear() === year && d.getMonth() + 1 === month) {
-          setExpenses((prev) => [created, ...prev]);
-        }
-      }
-      toast.success(t('common.saved'));
-      setFormOpen(false);
-    } catch { toast.error(t('common.error_save')); }
-    finally { setSaving(false); }
-  }
+  function openAdd() { navigate('/expenses/new'); }
+  function openEdit(e: Expense) { navigate(`/expenses/${e.id}/edit`); }
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -256,14 +235,6 @@ export function DashboardPage() {
           </div>
         )}
       </div>
-
-      <ExpenseForm
-        open={formOpen}
-        expense={editTarget}
-        onClose={() => setFormOpen(false)}
-        onSave={handleSave}
-        saving={saving}
-      />
 
       <ConfirmDialog
         open={!!deleteTarget}

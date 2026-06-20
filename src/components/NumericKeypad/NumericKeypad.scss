@@ -1,0 +1,61 @@
+@use '../../styles/variables' as *;
+
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  height: 100%;
+
+  &__key {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-family: $font-mono;
+    font-size: $font-h3;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-swift);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active,
+    &:hover {
+      background-color: var(--bg-surface-3, var(--bg-surface-2));
+      border-color: var(--border-hover);
+    }
+
+    &--del,
+    &--sign,
+    &--dot,
+    &--double {
+      color: var(--text-secondary);
+      font-size: $font-body;
+    }
+
+    &--next {
+      // spans rows 3 and 4 in column 4
+      grid-column: 4;
+      grid-row: 3 / 5;
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+      font-size: $font-body;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+
+      &:hover,
+      &:active {
+        opacity: 0.88;
+        border-color: var(--color-primary);
+      }
+    }
+  }
+}
