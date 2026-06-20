@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../lib/displayName';
 import { ArrowLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { expensesService } from '../../services/supabase/expenses.service';
 import { useExpenseFormData } from '../../hooks/useExpenseFormData';
@@ -149,8 +150,8 @@ export function AddExpensePage() {
 
   const valid = parseFloat(amount.replace(',', '.')) > 0 && date.length > 0;
 
-  const catName = useCallback((cat: Category) => cat.is_default ? t(cat.name) : cat.name, [t]);
-  const pmName = (pm: { name: string; is_default: boolean }) => pm.is_default ? t(pm.name) : pm.name;
+  const catName = useCallback((cat: Category) => displayName(cat, t), [t]);
+  const pmName = (pm: { name: string; is_default: boolean }) => displayName(pm, t);
   const tgName = (name: string) => name.startsWith('tag_group.') ? t(name) : name;
   const tagName = (name: string, isDefault: boolean) => isDefault ? t(name) : name;
 

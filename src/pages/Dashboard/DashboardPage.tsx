@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../lib/displayName';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -136,7 +137,7 @@ export function DashboardPage() {
     if (!id) return null;
     const cat = fd.categories.find((c) => c.id === id);
     if (!cat) return null;
-    return cat.is_default ? t(cat.name) : cat.name;
+    return displayName(cat, t);
   }
 
   function rowColor(type: Expense['type']) {

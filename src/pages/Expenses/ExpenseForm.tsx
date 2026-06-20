@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../lib/displayName';
 import { Modal } from '../../components/Modal/Modal';
 import { useExpenseFormData } from '../../hooks/useExpenseFormData';
 import { useAuthStore } from '../../store/auth.store';
@@ -101,8 +102,8 @@ export function ExpenseForm({ open, expense, onClose, onSave, saving }: ExpenseF
   const sortedGroups = [...fd.tagGroups].sort((a, b) => a.position - b.position);
   const sortedPm = [...fd.paymentMethods].sort((a, b) => a.position - b.position);
 
-  const catName = (cat: Category) => cat.is_default ? t(cat.name) : cat.name;
-  const pmName = (pm: { name: string; is_default: boolean }) => pm.is_default ? t(pm.name) : pm.name;
+  const catName = (cat: Category) => displayName(cat, t);
+  const pmName = (pm: { name: string; is_default: boolean }) => displayName(pm, t);
   const tgName = (name: string) => name.startsWith('tag_group.') ? t(name) : name;
   const tagName = (name: string, isDefault: boolean) => isDefault ? t(name) : name;
 

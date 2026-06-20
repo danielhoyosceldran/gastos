@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../lib/displayName';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { expensesService } from '../../services/supabase/expenses.service';
@@ -81,11 +82,11 @@ export function ExportPage() {
       if (!id) return '';
       const cat = categories.find((c) => c.id === id);
       if (!cat) return '';
-      const name = cat.is_default ? t(cat.name) : cat.name;
+      const name = displayName(cat, t);
       if (cat.parent_id) {
         const parent = categories.find((c) => c.id === cat.parent_id);
         if (parent) {
-          const pname = parent.is_default ? t(parent.name) : parent.name;
+          const pname = displayName(parent, t);
           return `${pname} > ${name}`;
         }
       }
@@ -96,7 +97,7 @@ export function ExportPage() {
       return ids.map((id) => {
         const tag = tags.find((tg) => tg.id === id);
         if (!tag) return '';
-        return tag.is_default ? t(tag.name) : tag.name;
+        return displayName(tag, t);
       }).filter(Boolean).join(', ');
     }
 
@@ -104,7 +105,7 @@ export function ExportPage() {
       if (!id) return '';
       const pm = payments.find((p) => p.id === id);
       if (!pm) return '';
-      return pm.is_default ? t(pm.name) : pm.name;
+      return displayName(pm, t);
     }
 
     function resolveName(id: string | null, list: { id: string; name: string }[]): string {

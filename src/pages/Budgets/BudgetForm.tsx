@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../lib/displayName';
 import { Cross2Icon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { useExpenseFormData } from '../../hooks/useExpenseFormData';
 import { useAuthStore } from '../../store/auth.store';
@@ -135,9 +136,9 @@ export function BudgetForm({ open, budget, onClose, onSave, saving }: BudgetForm
     (budgetType !== 'months' || selectedMonths.length > 0);
 
   const catName = useCallback((c: { name: string; is_default: boolean }) =>
-    c.is_default ? t(c.name) : c.name, [t]);
+    displayName(c, t), [t]);
   const tagName = useCallback((tg: { name: string; is_default: boolean }) =>
-    tg.is_default ? t(tg.name) : tg.name, [t]);
+    displayName(tg, t), [t]);
 
   const dimOptions: Array<{ id: string; label: string }> = (() => {
     if (dimension === 'category') return [...fd.categories].sort((a, b) => a.position - b.position).map((c) => ({ id: c.id, label: catName(c) }));

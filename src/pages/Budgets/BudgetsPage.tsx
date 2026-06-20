@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../lib/displayName';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { budgetsService } from '../../services/supabase/budgets.service';
 import type { Budget, CreateBudgetDTO } from '../../types/budget.types';
@@ -113,11 +114,11 @@ export function BudgetsPage() {
   function dimensionLabel(b: Budget): string {
     if (b.category_id) {
       const cat = fd.categories.find((c) => c.id === b.category_id);
-      return cat ? (cat.is_default ? t(cat.name) : cat.name) : '—';
+      return cat ? displayName(cat, t) : '—';
     }
     if (b.tag_id) {
       const tag = fd.tags.find((tg) => tg.id === b.tag_id);
-      return tag ? (tag.is_default ? t(tag.name) : tag.name) : '—';
+      return tag ? displayName(tag, t) : '—';
     }
     if (b.project_id) {
       const proj = fd.projects.find((p) => p.id === b.project_id);

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { PlusIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../../lib/displayName';
 import {
   DndContext,
   closestCenter,
@@ -158,7 +159,7 @@ export function CategoriesPage() {
   function openEdit(cat: Category) {
     setEditTarget(cat);
     setParentTarget(null);
-    setForm({ name: cat.is_default ? t(cat.name) : cat.name, color: cat.color, icon: cat.icon });
+    setForm({ name: displayName(cat, t), color: cat.color, icon: cat.icon });
     setFormOpen(true);
   }
 
@@ -177,7 +178,10 @@ export function CategoriesPage() {
         const updated = await categoriesService.update(editTarget.id, dto);
         setFlat((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
       } else {
-        const dto: CreateCategoryDTO = { name: form.name.trim(), color: form.color, icon: form.icon, parent_id: parentTarget?.id ?? null };
+        const parentId = parentTarget?.id ?? null;
+        const siblings = flat.filter((c) => (c.parent_id ?? null) === parentId);
+        const position = siblings.reduce((max, c) => Math.max(max, c.position), -1) + 1;
+        const dto: CreateCategoryDTO = { name: form.name.trim(), color: form.color, icon: form.icon, parent_id: parentId, position };
         const created = await categoriesService.create(dto);
         setFlat((prev) => [...prev, created]);
       }
@@ -217,7 +221,7 @@ export function CategoriesPage() {
     await Promise.all(newOrder.map((cat, idx) => categoriesService.reorder(cat.id, idx)));
   }
 
-  const renderName = (cat: Category) => cat.is_default ? t(cat.name) : cat.name;
+  const renderName = (cat: Category) => displayName(cat, t);
   const tree = buildTree([...flat].sort((a, b) => a.position - b.position));
 
   const modalTitle = editTarget

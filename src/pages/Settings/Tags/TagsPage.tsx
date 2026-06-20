@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../../lib/displayName';
 import {
   DndContext,
   closestCenter,
@@ -66,7 +67,7 @@ export function TagsPage() {
   function openEdit(tag: Tag) {
     setEditTarget(tag);
     setForm({
-      name: tag.is_default ? t(tag.name) : tag.name,
+      name: displayName(tag, t),
       color: tag.color,
       icon: tag.icon,
       tag_group_id: tag.tag_group_id,
@@ -121,7 +122,7 @@ export function TagsPage() {
     };
   }
 
-  const renderTagName = (tag: Tag) => tag.is_default ? t(tag.name) : tag.name;
+  const renderTagName = (tag: Tag) => displayName(tag, t);
   const renderGroupName = (g: TagGroup) => g.name.startsWith('tag_group.') ? t(g.name) : g.name;
   const sortedGroups = [...groups].sort((a, b) => a.position - b.position);
 

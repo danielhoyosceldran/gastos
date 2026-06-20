@@ -9,6 +9,7 @@ import { toast } from '../../store/toast.store';
 import { useAuthStore } from '../../store/auth.store';
 import { useExpenseFormData } from '../../hooks/useExpenseFormData';
 import { formatCurrency, formatDate } from '../../lib/format';
+import { displayName } from '../../lib/displayName';
 import './ExpensesPage.scss';
 
 interface Filters {
@@ -132,11 +133,11 @@ export function ExpensesPage() {
     if (!id) return null;
     const cat = fd.categories.find((c) => c.id === id);
     if (!cat) return null;
-    return cat.is_default ? t(cat.name) : cat.name;
+    return displayName(cat, t);
   }
 
   function pmName(pm: { name: string; is_default: boolean }) {
-    return pm.is_default ? t(pm.name) : pm.name;
+    return displayName(pm, t);
   }
 
   function amountColor(type: ExpenseType) {
@@ -187,7 +188,7 @@ export function ExpensesPage() {
               <select className="field__select" value={filters.categoryId} onChange={(e) => setFilter('categoryId', e.target.value)}>
                 <option value="">{t('expenses.all')}</option>
                 {sortedCats.map((c) => (
-                  <option key={c.id} value={c.id}>{c.is_default ? t(c.name) : c.name}</option>
+                  <option key={c.id} value={c.id}>{displayName(c, t)}</option>
                 ))}
               </select>
             </div>
@@ -197,7 +198,7 @@ export function ExpensesPage() {
               <select className="field__select" value={filters.tagId} onChange={(e) => setFilter('tagId', e.target.value)}>
                 <option value="">{t('expenses.all')}</option>
                 {sortedTags.map((tg) => (
-                  <option key={tg.id} value={tg.id}>{tg.is_default ? t(tg.name) : tg.name}</option>
+                  <option key={tg.id} value={tg.id}>{displayName(tg, t)}</option>
                 ))}
               </select>
             </div>

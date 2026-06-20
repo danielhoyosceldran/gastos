@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import { displayName } from '../../../lib/displayName';
 import {
   DndContext,
   closestCenter,
@@ -53,7 +54,7 @@ export function PaymentMethodsPage() {
   function openAdd() { setEditTarget(null); setName(''); setIcon(''); setFormOpen(true); }
   function openEdit(pm: PaymentMethod) {
     setEditTarget(pm);
-    setName(pm.is_default ? t(pm.name) : pm.name);
+    setName(displayName(pm, t));
     setIcon(pm.icon ?? '');
     setFormOpen(true);
   }
@@ -99,7 +100,7 @@ export function PaymentMethodsPage() {
   }
 
   const sorted = [...items].sort((a, b) => a.position - b.position);
-  const renderName = (pm: PaymentMethod) => pm.is_default ? t(pm.name) : pm.name;
+  const renderName = (pm: PaymentMethod) => displayName(pm, t);
 
   return (
     <div className="settings-page">
