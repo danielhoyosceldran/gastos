@@ -14,27 +14,19 @@ Full specs live in `plan/`:
 - `ui-specs.md` — design tokens, color system, page layouts, formatting
 - `roadmap.md` — 10-phase build plan (Phase 1 DB done, Phase 2 setup done)
 
-## Current state (Phase 2 complete)
+## Current state
 
-Base structure initialized. Nothing runnable yet — no pages, no routing, no components.
+App is built and runnable: auth (login + `approved` gate + waiting screen),
+expenses CRUD, budgets, analytics, settings (categories/tags/tag-groups/payment
+methods/events/projects/profile), export (CSV/PDF), PWA install. Routing in
+`src/App.tsx` (BrowserRouter). Services in `src/services/supabase/*`, shared
+reference data cached in `src/lib/refDataCache.ts` (invalidated by the settings
+services on mutation). Default-vs-custom name resolution via `src/lib/displayName.ts`.
 
-What exists:
-- `src/lib/supabase.ts` — Supabase client (needs `.env` with VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY)
-- `src/lib/i18n.ts` — i18next setup, 5 languages (en/es/ca/fr/it)
-- `src/locales/*.json` — translations for all default data keys
-- `src/styles/` — SCSS tokens, reset, typography, mixins, index entry
-- `src/store/auth.store.ts` — session, profile, language, currency
-- `src/store/expenses.store.ts` — expenses[], activeFilters
-- `src/store/settings.store.ts` — UI preferences (sidebar)
-- `vite.config.ts` — PWA configured, SCSS alias `@/` → `src/`
-- `src/App.tsx` — empty shell, ready for routing
-
-## Next: Phase 3 — Auth
-
-- Login page (email/password, no registration UI)
-- Session persistence via Supabase Auth
-- `profiles.approved` gate — unapproved users → waiting screen
-- Logout
+Still server-side / process work pending:
+- Version the DB schema: only `supabase/migrations/006_analytics.sql` and
+  `007_restrict_grants.sql` are committed; run `supabase db pull` to backfill
+  the rest from `plan/db-specs.md`.
 
 ## Key rules
 
@@ -66,8 +58,12 @@ RLS activo pero sin GRANT al role `authenticated`. Solución:
 
 ```sql
 GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO anon;
 ```
+
+> ⚠️ NO conceder a `anon`. La app no lee tablas antes del login (auth via GoTrue,
+> `profiles` se lee tras iniciar sesión). Conceder a `anon` elimina defensa en
+> profundidad: cualquier política RLS ausente expondría datos sin autenticar.
+> Ver `supabase/migrations/007_restrict_grants.sql`.
 
 ---
 
