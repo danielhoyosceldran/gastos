@@ -1,7 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
 import { expensesService } from '../../services/supabase/expenses.service';
 import { budgetsService } from '../../services/supabase/budgets.service';
 import type { Expense } from '../../types/expense.types';
@@ -40,6 +43,8 @@ export function DashboardPage() {
   const { profile } = useAuthStore();
   const fd = useExpenseFormData();
   const navigate = useNavigate();
+
+  const swiperRef = useRef<SwiperType | null>(null);
 
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -92,6 +97,16 @@ export function DashboardPage() {
     else setMonth((m) => m + 1);
   }
 
+  function handleSwipeChange(swiper: SwiperType) {
+    if (swiper.activeIndex === 0) {
+      prevMonth();
+      swiper.slideTo(1, 0);
+    } else if (swiper.activeIndex === 2) {
+      nextMonth();
+      swiper.slideTo(1, 0);
+    }
+  }
+
   const lang = profile?.language ?? 'en';
   const currency = profile?.currency ?? 'EUR';
 
@@ -131,6 +146,16 @@ export function DashboardPage() {
   }
 
   return (
+    <Swiper
+      initialSlide={1}
+      slidesPerView={1}
+      spaceBetween={0}
+      onSwiper={(s) => { swiperRef.current = s; }}
+      onSlideChangeTransitionEnd={handleSwipeChange}
+      style={{ width: '100%', height: '100%' }}
+    >
+      <SwiperSlide />
+      <SwiperSlide>
     <div className="dashboard">
       {/* Month nav */}
       <div className="dashboard__month-nav">
@@ -246,5 +271,8 @@ export function DashboardPage() {
         onCancel={() => setDeleteTarget(null)}
       />
     </div>
+      </SwiperSlide>
+      <SwiperSlide />
+    </Swiper>
   );
 }
