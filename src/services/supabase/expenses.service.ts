@@ -22,6 +22,19 @@ export const expensesService = {
     return (data as Record<string, unknown>[]).map(mapRow);
   },
 
+  // Paginated, newest first. Used by the list view so the initial load is
+  // bounded; callers append pages via "load more". Export still uses getAll.
+  async getPage(limit: number, offset: number): Promise<Expense[]> {
+    const { data, error } = await supabase
+      .from('expenses')
+      .select(COLS)
+      .order('date', { ascending: false })
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
+    if (error) throw error;
+    return (data as Record<string, unknown>[]).map(mapRow);
+  },
+
   async getByMonth(year: number, month: number): Promise<Expense[]> {
     const from = `${year}-${String(month).padStart(2, '0')}-01`;
     const lastDay = new Date(year, month, 0).getDate();

@@ -193,6 +193,8 @@
     "date_from": "Des de",
     "date_to": "Fins a",
     "clear_filters": "Netejar filtres",
+    "load_more": "Carrega'n més",
+    "filter_partial": "Els filtres s'apliquen només a les despeses carregades. Carrega'n més per continuar cercant.",
     "no_results": "Cap despesa coincideix amb els filtres actuals.",
     "showing": "Mostrant {{count}} de {{total}}"
   },

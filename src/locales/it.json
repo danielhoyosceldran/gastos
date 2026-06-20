@@ -193,6 +193,8 @@
     "date_from": "Dal",
     "date_to": "Al",
     "clear_filters": "Cancella filtri",
+    "load_more": "Carica altri",
+    "filter_partial": "I filtri si applicano solo alle spese caricate. Carica altri per continuare la ricerca.",
     "no_results": "Nessuna spesa corrisponde ai filtri attuali.",
     "showing": "Visualizzando {{count}} di {{total}}"
   },

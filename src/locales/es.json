@@ -193,6 +193,8 @@
     "date_from": "Desde",
     "date_to": "Hasta",
     "clear_filters": "Limpiar filtros",
+    "load_more": "Cargar más",
+    "filter_partial": "Los filtros se aplican solo a los gastos cargados. Carga más para seguir buscando.",
     "no_results": "No hay gastos que coincidan con los filtros.",
     "showing": "Mostrando {{count}} de {{total}}"
   },

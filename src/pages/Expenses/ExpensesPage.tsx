@@ -31,6 +31,8 @@ function hasActiveFilters(f: Filters) {
   return Object.values(f).some((v) => v !== '');
 }
 
+const PAGE_SIZE = 100;
+
 export function ExpensesPage() {
   const { t } = useTranslation();
   const { profile } = useAuthStore();
@@ -38,6 +40,8 @@ export function ExpensesPage() {
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
 
@@ -48,12 +52,29 @@ export function ExpensesPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const load = useCallback(async () => {
-    try { setExpenses(await expensesService.getAll()); }
-    catch { toast.error(t('common.error_load')); }
+    setLoading(true);
+    try {
+      const page = await expensesService.getPage(PAGE_SIZE, 0);
+      setExpenses(page);
+      setHasMore(page.length === PAGE_SIZE);
+    } catch { toast.error(t('common.error_load')); }
     finally { setLoading(false); }
   }, [t]);
 
   useEffect(() => { load(); }, [load]);
+
+  const loadMore = useCallback(async () => {
+    setLoadingMore(true);
+    try {
+      const page = await expensesService.getPage(PAGE_SIZE, expenses.length);
+      setExpenses((prev) => {
+        const seen = new Set(prev.map((e) => e.id));
+        return [...prev, ...page.filter((e) => !seen.has(e.id))];
+      });
+      setHasMore(page.length === PAGE_SIZE);
+    } catch { toast.error(t('common.error_load')); }
+    finally { setLoadingMore(false); }
+  }, [expenses.length, t]);
 
   function setFilter<K extends keyof Filters>(key: K, value: Filters[K]) {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -270,6 +291,15 @@ export function ExpensesPage() {
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {!loading && hasMore && (
+        <div className="expenses-page__load-more">
+          {active && <p className="expenses-page__load-more-hint">{t('expenses.filter_partial')}</p>}
+          <button className="btn btn--ghost" onClick={loadMore} disabled={loadingMore}>
+            {loadingMore ? t('common.loading') : t('expenses.load_more')}
+          </button>
         </div>
       )}
 

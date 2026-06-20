@@ -193,6 +193,8 @@
     "date_from": "From",
     "date_to": "To",
     "clear_filters": "Clear filters",
+    "load_more": "Load more",
+    "filter_partial": "Filters apply to loaded expenses only. Load more to search further.",
     "no_results": "No expenses match the current filters.",
     "showing": "Showing {{count}} of {{total}}"
   },

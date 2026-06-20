@@ -193,6 +193,8 @@
     "date_from": "Du",
     "date_to": "Au",
     "clear_filters": "Effacer les filtres",
+    "load_more": "Charger plus",
+    "filter_partial": "Les filtres s'appliquent uniquement aux dépenses chargées. Chargez-en plus pour poursuivre la recherche.",
     "no_results": "Aucune dépense ne correspond aux filtres actuels.",
     "showing": "Affichage de {{count}} sur {{total}}"
   },
