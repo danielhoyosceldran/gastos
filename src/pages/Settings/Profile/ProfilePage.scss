@@ -9,11 +9,11 @@
 
 .profile-section {
   &__title {
-    font-size: $font-small;
-    font-weight: 500;
+    font-size: 10px;
+    font-weight: 700;
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.1em;
     margin: 0 0 $space-3;
   }
 }
@@ -60,23 +60,26 @@
 
 .profile-option {
   padding: $space-2 $space-4;
-  border: 1px solid var(--border);
-  background-color: var(--bg-surface-2);
+  background-color: transparent;
   color: var(--text-secondary);
-  font-size: $font-body;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.12s;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    border-color: var(--text-secondary);
+    border-color: var(--border-hover);
     color: var(--text-primary);
   }
 
   &--active {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-alpha);
     border-color: var(--color-primary);
-    color: #fff;
+    color: var(--color-primary);
   }
 
   &:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -87,29 +90,33 @@
   align-items: center;
   gap: $space-2;
   padding: $space-2 $space-4;
-  border: 1px solid var(--border);
-  background-color: var(--bg-surface-2);
+  background-color: transparent;
   color: var(--text-secondary);
-  font-size: $font-body;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.12s;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    border-color: var(--text-secondary);
+    border-color: var(--border-hover);
     color: var(--text-primary);
   }
 
   &--active {
-    border-color: var(--text-primary);
+    border-color: var(--border-hover);
     color: var(--text-primary);
-    background-color: var(--bg-surface-1);
+    background-color: var(--bg-surface-2);
   }
 
   &__swatch {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     flex-shrink: 0;
+    border-radius: 3px;
   }
 
   &:disabled { opacity: 0.5; cursor: not-allowed; }

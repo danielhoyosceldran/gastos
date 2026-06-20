@@ -4,7 +4,7 @@
 .expenses-page {
   display: flex;
   flex-direction: column;
-  gap: $space-4;
+  gap: $space-5;
 
   &__header {
     display: flex;
@@ -14,8 +14,9 @@
   }
 
   &__title {
-    font-size: $font-h1;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
     margin: 0;
   }
@@ -27,8 +28,9 @@
   }
 
   &__filter-btn--active {
-    border-color: var(--color-primary);
     color: var(--color-primary);
+    background-color: var(--color-primary-alpha);
+    border-color: var(--color-primary) !important;
   }
 
   &__count {
@@ -38,14 +40,15 @@
   }
 }
 
-// ── Filter panel ────────────────────────────────────────────────
+// ── Filter panel ─────────────────────────────────────────────────
 .expenses-filters {
   display: flex;
   flex-direction: column;
   gap: $space-4;
   padding: $space-4;
-  background-color: var(--bg-surface-2);
+  background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
 
   &__grid {
     display: grid;
@@ -62,7 +65,7 @@
   }
 }
 
-// ── Empty ───────────────────────────────────────────────────────
+// ── Empty ────────────────────────────────────────────────────────
 .expenses-empty {
   display: flex;
   flex-direction: column;
@@ -71,15 +74,18 @@
   padding: $space-8 $space-5;
   color: var(--text-secondary);
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
   background-color: var(--bg-surface-1);
   text-align: center;
 }
 
-// ── List ────────────────────────────────────────────────────────
+// ── List ─────────────────────────────────────────────────────────
 .expenses-list {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  overflow: hidden;
 }
 
 .expense-row {
@@ -90,7 +96,7 @@
   border-bottom: 1px solid var(--border);
   background-color: var(--bg-surface-1);
   cursor: pointer;
-  transition: background-color 0.1s;
+  transition: background-color 0.15s ease;
 
   &:last-child { border-bottom: none; }
   &:hover { background-color: var(--bg-surface-2); }
@@ -108,7 +114,7 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
   }
 
   &__desc {
@@ -120,8 +126,15 @@
   }
 
   &__category {
-    font-size: $font-small;
+    display: inline-block;
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 400;
     color: var(--text-secondary);
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    border-radius: $radius-sm;
+    padding: 1px 6px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -133,12 +146,13 @@
     white-space: nowrap;
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
   }
 
   &__delete {
     flex-shrink: 0;
     opacity: 0;
-    transition: opacity 0.1s;
+    transition: opacity 0.15s;
   }
 
   &:hover &__delete {

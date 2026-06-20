@@ -3,9 +3,28 @@
     "dashboard": "Dashboard",
     "expenses": "Expenses",
     "budgets": "Budgets",
+    "analytics": "Analytics",
     "settings": "Settings",
     "export": "Export",
     "main": "Main navigation"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "from": "From",
+    "to": "To",
+    "currency": "Currency",
+    "dim_category": "By Category",
+    "dim_tag": "By Tag",
+    "dim_project": "By Project",
+    "dim_event": "By Event",
+    "trend_title": "Spending Over Time",
+    "spent": "Spent",
+    "income": "Income",
+    "empty_category": "No category data.",
+    "empty_tag": "No tag data.",
+    "empty_project": "No project data.",
+    "empty_event": "No event data.",
+    "empty_trend": "No data for selected range."
   },
   "settings": {
     "toggle_theme": "Toggle theme"
@@ -17,7 +36,8 @@
     "payment_methods": "Payment methods",
     "events": "Events",
     "projects": "Projects",
-    "profile": "Profile"
+    "profile": "Profile",
+    "export": "Export"
   },
   "common": {
     "save": "Save",

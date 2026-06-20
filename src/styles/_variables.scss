@@ -1,5 +1,6 @@
 // Typography
-$font-family: 'DM Sans', sans-serif;
+$font-family: 'Inter', 'Geist Sans', system-ui, sans-serif;
+$font-mono: 'Fira Code', 'Geist Mono', 'Cascadia Code', monospace;
 $font-display: 32px;
 $font-h1: 24px;
 $font-h2: 20px;
@@ -7,8 +8,14 @@ $font-h3: 16px;
 $font-body: 14px;
 $font-small: 12px;
 
-// Borders
-$border-radius: 0;
+// Border radius
+$radius-sm: 6px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-full: 9999px;
+
+// Border width
 $border-width: 1px;
 
 // Spacing scale
@@ -20,11 +27,6 @@ $space-5: 24px;
 $space-6: 32px;
 $space-7: 48px;
 $space-8: 64px;
-
-// Primary color options (set via CSS custom properties at runtime)
-// blue: #4F88DB / #7AAAE5 / #2D64B5
-// green: #4A7C6F / #6B9E8F / #2E5C51
-// red: #9B4A4A / #BF6B6B / #7A2E2E
 
 // Chart palette (20 colors, max contrast between adjacent)
 $chart-colors: (

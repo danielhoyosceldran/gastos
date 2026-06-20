@@ -7,7 +7,7 @@
   max-width: 720px;
 }
 
-// ── Month nav ────────────────────────────────────────────────
+// ── Month nav ─────────────────────────────────────────────────────
 .dashboard__month-nav {
   display: flex;
   align-items: center;
@@ -15,22 +15,26 @@
 }
 
 .dashboard__month-label {
-  font-size: $font-h2;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   flex: 1;
   text-align: center;
-  text-transform: capitalize;
+  letter-spacing: -0.01em;
 }
 
-// ── Totals ────────────────────────────────────────────────────
+// ── Totals ────────────────────────────────────────────────────────
 .dashboard__totals {
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
   padding: $space-5;
   display: flex;
   flex-direction: column;
   gap: $space-3;
+  transition: border-color 0.2s ease;
+
+  &:hover { border-color: var(--border-hover); }
 }
 
 .dashboard__total-row {
@@ -42,6 +46,7 @@
   &--net {
     padding-top: $space-3;
     border-top: 1px solid var(--border);
+    margin-top: $space-1;
   }
 }
 
@@ -55,12 +60,13 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
 
-  &--spent  { color: var(--toast-error-text); }
-  &--income { color: var(--toast-success-text); }
+  &--spent  { color: var(--color-expense); }
+  &--income { color: var(--color-income); }
 }
 
-// ── Sections ──────────────────────────────────────────────────
+// ── Sections ──────────────────────────────────────────────────────
 .dashboard__section {
   display: flex;
   flex-direction: column;
@@ -75,15 +81,15 @@
 }
 
 .dashboard__section-title {
-  font-size: $font-h3;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
   margin: 0;
 }
 
-// ── Budget mini-cards ─────────────────────────────────────────
+// ── Budget mini-cards ──────────────────────────────────────────────
 .dashboard__budgets {
   display: flex;
   flex-direction: column;
@@ -93,10 +99,17 @@
 .dashboard__budget-item {
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
+  border-radius: $radius-md;
   padding: $space-3 $space-4;
   display: flex;
   flex-direction: column;
   gap: $space-2;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+  }
 }
 
 .dashboard__budget-top {
@@ -123,8 +136,9 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   flex-shrink: 0;
+  letter-spacing: -0.01em;
 
-  &--over { color: var(--toast-error-text); }
+  &--over { color: var(--color-expense); }
 }
 
 .dashboard__budget-limit {
@@ -134,8 +148,9 @@
 }
 
 .dashboard__budget-bar {
-  height: 5px;
+  height: 4px;
   background-color: var(--bg-surface-3);
+  border-radius: $radius-full;
   width: 100%;
   overflow: hidden;
 }
@@ -143,19 +158,21 @@
 .dashboard__budget-fill {
   height: 100%;
   background-color: var(--color-primary);
-  transition: width 0.3s ease;
+  border-radius: $radius-full;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
-  &--over { background-color: var(--toast-error-icon); }
+  &--over { background-color: var(--color-expense); }
 }
 
-// ── Expense list ──────────────────────────────────────────────
+// ── Expense list ───────────────────────────────────────────────────
 .dashboard__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: $space-3;
-  padding: $space-6 $space-5;
+  padding: $space-7 $space-5;
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
   background-color: var(--bg-surface-1);
   color: var(--text-secondary);
   font-size: $font-body;
@@ -166,6 +183,8 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  overflow: hidden;
 }
 
 .dashboard__expense-row {
@@ -176,7 +195,7 @@
   border-bottom: 1px solid var(--border);
   background-color: var(--bg-surface-1);
   cursor: pointer;
-  transition: background-color 0.1s;
+  transition: background-color 0.15s ease;
 
   &:last-child { border-bottom: none; }
   &:hover { background-color: var(--bg-surface-2); }
@@ -190,10 +209,25 @@
   min-width: 80px;
 }
 
-.dashboard__expense-desc {
+.dashboard__expense-main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.dashboard__expense-desc {
   font-size: $font-body;
   color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard__expense-category {
+  font-size: 11px;
+  color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -205,4 +239,15 @@
   white-space: nowrap;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.dashboard__expense-delete {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  .dashboard__expense-row:hover & {
+    opacity: 1;
+  }
 }

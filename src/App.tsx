@@ -4,7 +4,6 @@ import { LoginPage } from './pages/auth/LoginPage';
 import { WaitingPage } from './pages/auth/WaitingPage';
 import { AppLayout } from './components/Layout/AppLayout';
 import { DashboardPage } from './pages/Dashboard/DashboardPage';
-import { ExpensesPage } from './pages/Expenses/ExpensesPage';
 import { BudgetsPage } from './pages/Budgets/BudgetsPage';
 import { SettingsPage } from './pages/Settings/SettingsPage';
 import { CategoriesPage } from './pages/Settings/Categories/CategoriesPage';
@@ -15,6 +14,7 @@ import { EventsPage } from './pages/Settings/Events/EventsPage';
 import { ProjectsPage } from './pages/Settings/Projects/ProjectsPage';
 import { ProfilePage } from './pages/Settings/Profile/ProfilePage';
 import { ExportPage } from './pages/Export/ExportPage';
+import { AnalyticsPage } from './pages/Analytics/AnalyticsPage';
 import { ToastContainer } from './components/Toast/ToastContainer';
 
 function App() {
@@ -39,9 +39,8 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
-          <Route path="expenses" element={<ExpensesPage />} />
           <Route path="budgets" element={<BudgetsPage />} />
-          <Route path="export" element={<ExportPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="settings" element={<SettingsPage />}>
             <Route index element={<Navigate to="categories" replace />} />
             <Route path="categories"      element={<CategoriesPage />} />
@@ -51,6 +50,7 @@ function App() {
             <Route path="events"          element={<EventsPage />} />
             <Route path="projects"        element={<ProjectsPage />} />
             <Route path="profile"         element={<ProfilePage />} />
+            <Route path="export"          element={<ExportPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

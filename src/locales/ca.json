@@ -3,9 +3,28 @@
     "dashboard": "Tauler",
     "expenses": "Despeses",
     "budgets": "Pressupostos",
+    "analytics": "Analítiques",
     "settings": "Ajustos",
     "export": "Exportar",
     "main": "Navegació principal"
+  },
+  "analytics": {
+    "title": "Analítiques",
+    "from": "Des de",
+    "to": "Fins a",
+    "currency": "Moneda",
+    "dim_category": "Per categoria",
+    "dim_tag": "Per etiqueta",
+    "dim_project": "Per projecte",
+    "dim_event": "Per esdeveniment",
+    "trend_title": "Despesa al llarg del temps",
+    "spent": "Gastat",
+    "income": "Ingressos",
+    "empty_category": "Sense dades de categoria.",
+    "empty_tag": "Sense dades d'etiqueta.",
+    "empty_project": "Sense dades de projecte.",
+    "empty_event": "Sense dades d'esdeveniment.",
+    "empty_trend": "Sense dades per al rang seleccionat."
   },
   "settings": {
     "toggle_theme": "Canviar tema"
@@ -17,7 +36,8 @@
     "payment_methods": "Mètodes de pagament",
     "events": "Esdeveniments",
     "projects": "Projectes",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "export": "Exportar"
   },
   "common": {
     "save": "Desar",

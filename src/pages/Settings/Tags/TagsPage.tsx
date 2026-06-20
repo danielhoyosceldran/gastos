@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { tagsService } from '../../../services/supabase/tags.service';
 import { tagGroupsService } from '../../../services/supabase/tag-groups.service';
@@ -125,10 +126,10 @@ export function TagsPage() {
                         <span className="settings-item__name">{renderTagName(tag)}</span>
                         {tag.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
                         <div className="settings-item__actions">
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(tag, groupTags, -1)} disabled={idx === 0}>↑</button>
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(tag, groupTags, 1)} disabled={idx === groupTags.length - 1}>↓</button>
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(tag)}>✎</button>
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(tag)}>✕</button>
+                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(tag, groupTags, -1)} disabled={idx === 0}><ArrowUpIcon width={12} height={12} /></button>
+                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(tag, groupTags, 1)} disabled={idx === groupTags.length - 1}><ArrowDownIcon width={12} height={12} /></button>
+                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(tag)}><Pencil1Icon width={12} height={12} /></button>
+                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(tag)}><Cross2Icon width={12} height={12} /></button>
                         </div>
                       </div>
                     ))}

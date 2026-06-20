@@ -4,68 +4,154 @@
 @use 'typography';
 @use 'components';
 
-// CSS custom properties — light mode defaults
+// ── CSS Custom Properties ────────────────────────────────────────
+
 :root {
-  --bg-base: #f8f9fa;
+  // Accent — indigo/violet
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-primary-dark: #4f46e5;
+  --color-primary-alpha: rgba(99, 102, 241, 0.12);
+
+  // Semantic
+  --color-income: #10b981;
+  --color-expense: #f43f5e;
+
+  // Radius (exposed as CSS vars for components)
+  --radius-sm: #{$radius-sm};
+  --radius-md: #{$radius-md};
+  --radius-lg: #{$radius-lg};
+  --radius-xl: #{$radius-xl};
+  --radius-full: #{$radius-full};
+
+  // Light mode
+  --bg-base: #f8fafc;
   --bg-surface-1: #ffffff;
-  --bg-surface-2: #f0f2f5;
-  --bg-surface-3: #e8eaed;
-  --border: #dee2e6;
-  --text-primary: #1a1a1a;
-  --text-secondary: #6b7280;
-  --text-disabled: #b0b4bb;
+  --bg-surface-2: #f1f5f9;
+  --bg-surface-3: #e2e8f0;
+  --border: rgba(0, 0, 0, 0.07);
+  --border-hover: rgba(0, 0, 0, 0.16);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-disabled: #94a3b8;
+  --text-mono: #334155;
 
-  // Primary color — blue default (overridden at runtime from profiles.primary_color)
-  --color-primary: #4f88db;
-  --color-primary-light: #7aaae5;
-  --color-primary-dark: #2d64b5;
+  // Nav (light)
+  --nav-bg: #0b0b0f;
+  --nav-border: rgba(255, 255, 255, 0.07);
+  --nav-text: #64748b;
+  --nav-text-hover: #f8fafc;
+  --nav-active: #818cf8;
+  --nav-active-bg: rgba(99, 102, 241, 0.1);
 
-  // Toast colors
-  --toast-info-bg: #ebf2fc;
-  --toast-info-text: #2d64b5;
-  --toast-info-icon: #4f88db;
-  --toast-success-bg: #e8f7f1;
-  --toast-success-text: #2a7057;
-  --toast-success-icon: #3d9e7a;
-  --toast-error-bg: #fceaea;
-  --toast-error-text: #a83232;
-  --toast-error-icon: #d94f4f;
-  --toast-warning-bg: #fdf3e7;
-  --toast-warning-text: #a8621a;
-  --toast-warning-icon: #d4872a;
+  // Toast
+  --toast-info-bg: #eff6ff;
+  --toast-info-text: #1e40af;
+  --toast-info-icon: #3b82f6;
+  --toast-success-bg: #ecfdf5;
+  --toast-success-text: #065f46;
+  --toast-success-icon: #10b981;
+  --toast-error-bg: #fff1f2;
+  --toast-error-text: #9f1239;
+  --toast-error-icon: #f43f5e;
+  --toast-warning-bg: #fffbeb;
+  --toast-warning-text: #92400e;
+  --toast-warning-icon: #f59e0b;
 }
 
 [data-theme='dark'] {
-  --bg-base: #000000;
-  --bg-surface-1: #111111;
-  --bg-surface-2: #1c1c1c;
-  --bg-surface-3: #282828;
-  --border: #2e2e2e;
-  --text-primary: #f5f5f5;
-  --text-secondary: #a0a0a0;
-  --text-disabled: #555555;
+  --bg-base: #0b0b0f;
+  --bg-surface-1: #13131a;
+  --bg-surface-2: #1a1a24;
+  --bg-surface-3: #22222e;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-disabled: #334155;
+  --text-mono: #a5b4fc;
+
+  --nav-bg: rgba(13, 13, 20, 0.72);
+  --nav-border: rgba(255, 255, 255, 0.06);
+  --nav-text: #64748b;
+  --nav-text-hover: #f8fafc;
+  --nav-active: #818cf8;
+  --nav-active-bg: rgba(99, 102, 241, 0.1);
+
+  --toast-info-bg: rgba(30, 64, 175, 0.15);
+  --toast-info-text: #93c5fd;
+  --toast-info-icon: #60a5fa;
+  --toast-success-bg: rgba(6, 78, 59, 0.18);
+  --toast-success-text: #6ee7b7;
+  --toast-success-icon: #10b981;
+  --toast-error-bg: rgba(159, 18, 57, 0.18);
+  --toast-error-text: #fda4af;
+  --toast-error-icon: #f43f5e;
+  --toast-warning-bg: rgba(120, 53, 15, 0.18);
+  --toast-warning-text: #fcd34d;
+  --toast-warning-icon: #f59e0b;
 }
 
-// Primary color themes
+// Color themes — accent overrides
 [data-color='blue'] {
-  --color-primary: #4f88db;
-  --color-primary-light: #7aaae5;
-  --color-primary-dark: #2d64b5;
+  --color-primary: #3b82f6;
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #2563eb;
+  --color-primary-alpha: rgba(59, 130, 246, 0.12);
 }
 
 [data-color='green'] {
-  --color-primary: #4a7c6f;
-  --color-primary-light: #6b9e8f;
-  --color-primary-dark: #2e5c51;
+  --color-primary: #10b981;
+  --color-primary-light: #34d399;
+  --color-primary-dark: #059669;
+  --color-primary-alpha: rgba(16, 185, 129, 0.12);
 }
 
 [data-color='red'] {
-  --color-primary: #9b4a4a;
-  --color-primary-light: #bf6b6b;
-  --color-primary-dark: #7a2e2e;
+  --color-primary: #f43f5e;
+  --color-primary-light: #fb7185;
+  --color-primary-dark: #e11d48;
+  --color-primary-alpha: rgba(244, 63, 94, 0.12);
 }
+
+// ── Base ──────────────────────────────────────────────────────────
 
 html,
 body {
   background-color: var(--bg-base);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+// Subtle aurora spotlight (dark mode only)
+[data-theme='dark'] body {
+  background-image:
+    radial-gradient(ellipse at 15% -5%, rgba(99, 102, 241, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(79, 70, 229, 0.05) 0%, transparent 50%);
+}
+
+// ── Utilities ─────────────────────────────────────────────────────
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: $font-mono;
+  color: var(--text-mono);
+}
+
+.scroll-hidden {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.mask-fade {
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
 }

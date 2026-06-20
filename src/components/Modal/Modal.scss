@@ -3,7 +3,9 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 500;
   display: flex;
   align-items: center;
@@ -14,6 +16,7 @@
 .modal {
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
+  border-radius: $radius-xl;
   width: 100%;
   max-width: 480px;
   max-height: 90dvh;
@@ -30,8 +33,9 @@
   }
 
   &__title {
-    font-size: $font-h2;
+    font-size: 13px;
     font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
     margin: 0;
   }
@@ -39,10 +43,15 @@
   &__close {
     color: var(--text-secondary);
     font-size: $font-body;
-    padding: $space-1;
+    padding: 4px;
     line-height: 1;
+    border-radius: $radius-sm;
+    transition: color 0.2s ease, background-color 0.2s ease;
 
-    &:hover { color: var(--text-primary); }
+    &:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-surface-2);
+    }
   }
 
   &__body {

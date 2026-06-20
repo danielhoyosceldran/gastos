@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { tagGroupsService } from '../../../services/supabase/tag-groups.service';
 import type { TagGroup } from '../../../types/tag.types';
@@ -99,11 +100,11 @@ export function TagGroupsPage() {
                 <span className="settings-item__name">{renderName(g)}</span>
                 {isUngrouped(g) && <span className="settings-item__default-badge">{t('common.system')}</span>}
                 <div className="settings-item__actions">
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(g, -1)} disabled={idx === 0}>↑</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(g, 1)} disabled={idx === sorted.length - 1}>↓</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(g)}>✎</button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(g, -1)} disabled={idx === 0}><ArrowUpIcon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(g, 1)} disabled={idx === sorted.length - 1}><ArrowDownIcon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(g)}><Pencil1Icon width={12} height={12} /></button>
                   {!isUngrouped(g) && (
-                    <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(g)}>✕</button>
+                    <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(g)}><Cross2Icon width={12} height={12} /></button>
                   )}
                 </div>
               </div>

@@ -10,6 +10,7 @@ const SECTIONS = [
   { to: '/settings/events',          label: 'settings_nav.events' },
   { to: '/settings/projects',        label: 'settings_nav.projects' },
   { to: '/settings/profile',         label: 'settings_nav.profile' },
+  { to: '/settings/export',          label: 'settings_nav.export' },
 ] as const;
 
 export function SettingsPage() {

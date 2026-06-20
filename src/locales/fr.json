@@ -3,9 +3,28 @@
     "dashboard": "Tableau de bord",
     "expenses": "Dépenses",
     "budgets": "Budgets",
+    "analytics": "Analytiques",
     "settings": "Paramètres",
     "export": "Exporter",
     "main": "Navigation principale"
+  },
+  "analytics": {
+    "title": "Analytiques",
+    "from": "Du",
+    "to": "Au",
+    "currency": "Devise",
+    "dim_category": "Par catégorie",
+    "dim_tag": "Par étiquette",
+    "dim_project": "Par projet",
+    "dim_event": "Par événement",
+    "trend_title": "Dépenses dans le temps",
+    "spent": "Dépensé",
+    "income": "Revenus",
+    "empty_category": "Pas de données par catégorie.",
+    "empty_tag": "Pas de données par étiquette.",
+    "empty_project": "Pas de données par projet.",
+    "empty_event": "Pas de données par événement.",
+    "empty_trend": "Aucune donnée pour la période sélectionnée."
   },
   "settings": {
     "toggle_theme": "Changer le thème"
@@ -17,7 +36,8 @@
     "payment_methods": "Moyens de paiement",
     "events": "Événements",
     "projects": "Projets",
-    "profile": "Profil"
+    "profile": "Profil",
+    "export": "Exporter"
   },
   "common": {
     "save": "Enregistrer",

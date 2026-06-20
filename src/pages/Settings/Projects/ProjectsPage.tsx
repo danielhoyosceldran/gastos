@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { projectsService } from '../../../services/supabase/projects.service';
 import type { Project, CreateProjectDTO } from '../../../types/project.types';
@@ -101,8 +102,8 @@ export function ProjectsPage() {
                   )}
                 </div>
                 <div className="settings-item__actions">
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(p)}>✎</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(p)}>✕</button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(p)}><Pencil1Icon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(p)}><Cross2Icon width={12} height={12} /></button>
                 </div>
               </div>
             ))}

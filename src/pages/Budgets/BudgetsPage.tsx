@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { budgetsService } from '../../services/supabase/budgets.service';
 import type { Budget, CreateBudgetDTO } from '../../types/budget.types';
 import { BudgetForm } from './BudgetForm';
@@ -182,7 +183,7 @@ export function BudgetsPage() {
                     onClick={(e) => { e.stopPropagation(); setDeleteTarget(b); }}
                     title={t('common.delete')}
                   >
-                    ✕
+                    <Cross2Icon width={12} height={12} />
                   </button>
                 </div>
 

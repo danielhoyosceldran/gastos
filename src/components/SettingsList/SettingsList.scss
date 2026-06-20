@@ -16,8 +16,9 @@
 }
 
 .settings-page__title {
-  font-size: $font-h1;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   margin: 0;
 }
@@ -26,6 +27,9 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background-color: var(--bg-surface-1);
 }
 
 .settings-item {
@@ -36,7 +40,6 @@
   gap: $space-3;
   padding: $space-3 $space-4;
   border-bottom: 1px solid var(--border);
-  background-color: var(--bg-surface-1);
 
   &:last-child { border-bottom: none; }
 
@@ -51,10 +54,10 @@
   }
 
   &__color {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     flex-shrink: 0;
-    border: 1px solid var(--border);
+    border-radius: 3px;
   }
 
   &__name {
@@ -68,11 +71,14 @@
   }
 
   &__default-badge {
-    font-size: 10px;
-    font-weight: 500;
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 400;
     color: var(--text-disabled);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    border-radius: $radius-sm;
+    padding: 1px 6px;
     flex-shrink: 0;
   }
 
@@ -97,5 +103,6 @@
   color: var(--text-secondary);
   font-size: $font-body;
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
   background-color: var(--bg-surface-1);
 }

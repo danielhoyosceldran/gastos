@@ -8,17 +8,19 @@
   &__none {
     width: 28px;
     height: 28px;
-    border: 1px solid var(--border);
     background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    border-radius: $radius-sm;
     color: var(--text-secondary);
     font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
 
     &--active {
       border-color: var(--text-primary);
-      color: var(--text-primary);
     }
   }
 
@@ -26,12 +28,17 @@
     width: 28px;
     height: 28px;
     border: 2px solid transparent;
+    border-radius: $radius-sm;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.15s ease, outline-offset 0.15s ease;
+
+    &:hover { transform: scale(1.1); }
 
     &--active {
       border-color: var(--text-primary);
-      outline: 1px solid var(--bg-surface-1);
-      outline-offset: -3px;
+      outline: 2px solid var(--bg-surface-1);
+      outline-offset: -4px;
     }
   }
 }

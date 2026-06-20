@@ -17,42 +17,49 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background-color: var(--bg-surface-1);
   flex-shrink: 0;
 
   @include md {
     border: none;
+    background-color: transparent;
     border-right: 1px solid var(--border);
+    border-radius: 0;
     padding-right: $space-5;
     min-width: 160px;
   }
 
   &__link {
-    font-size: $font-body;
+    font-size: 11px;
     font-weight: 500;
+    letter-spacing: 0.01em;
     color: var(--text-secondary);
     padding: $space-3 $space-4;
     border-bottom: 1px solid var(--border);
-    border-left: 3px solid transparent;
-    transition: color 0.12s, background-color 0.12s, border-color 0.12s;
-    background-color: var(--bg-surface-1);
+    transition: color 0.2s ease, background-color 0.2s ease;
 
     &:last-child { border-bottom: none; }
-    &:hover { color: var(--text-primary); background-color: var(--bg-surface-2); }
+
+    &:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-surface-2);
+    }
 
     &--active {
       color: var(--color-primary);
-      border-left-color: var(--color-primary);
-      background-color: var(--bg-surface-2);
+      background-color: var(--color-primary-alpha);
     }
 
     @include md {
       border-bottom: none;
-      padding: $space-2 $space-4;
-      background-color: transparent;
+      border-radius: $radius-md;
+      margin-bottom: 2px;
+      padding: $space-2 $space-3;
 
       &:hover { background-color: var(--bg-surface-2); }
-
-      &--active { background-color: var(--bg-surface-2); }
+      &--active { background-color: var(--color-primary-alpha); }
     }
   }
 }

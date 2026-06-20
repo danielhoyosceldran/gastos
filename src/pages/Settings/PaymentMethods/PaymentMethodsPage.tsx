@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { paymentMethodsService } from '../../../services/supabase/payment-methods.service';
 import type { PaymentMethod } from '../../../types/payment-method.types';
@@ -97,10 +98,10 @@ export function PaymentMethodsPage() {
                 <span className="settings-item__name">{renderName(pm)}</span>
                 {pm.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
                 <div className="settings-item__actions">
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(pm, -1)} disabled={idx === 0}>↑</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(pm, 1)} disabled={idx === sorted.length - 1}>↓</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(pm)}>✎</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(pm)}>✕</button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(pm, -1)} disabled={idx === 0}><ArrowUpIcon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(pm, 1)} disabled={idx === sorted.length - 1}><ArrowDownIcon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(pm)}><Pencil1Icon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(pm)}><Cross2Icon width={12} height={12} /></button>
                 </div>
               </div>
             ))}

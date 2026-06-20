@@ -14,13 +14,15 @@
   max-width: 400px;
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
+  border-radius: $radius-xl;
   padding: $space-7 $space-6;
   text-align: center;
 }
 
 .waiting-title {
-  font-size: $font-h1;
+  font-size: $font-h3;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
   margin: 0 0 $space-4;
 }
@@ -33,17 +35,20 @@
 }
 
 .waiting-btn {
-  background: none;
-  border: 1px solid var(--border);
+  background-color: transparent;
   color: var(--text-secondary);
-  font-size: $font-body;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   font-family: inherit;
-  padding: $space-3 $space-5;
+  padding: $space-2 $space-5;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  border: 1px solid var(--border);
+  border-radius: $radius-md;
+  transition: border-color 0.2s ease, color 0.2s ease;
 
   &:hover {
-    border-color: var(--text-primary);
+    border-color: var(--border-hover);
     color: var(--text-primary);
   }
 }

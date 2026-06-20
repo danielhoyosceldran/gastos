@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { eventsService } from '../../../services/supabase/events.service';
 import type { Event, CreateEventDTO } from '../../../types/event.types';
@@ -101,8 +102,8 @@ export function EventsPage() {
                   )}
                 </div>
                 <div className="settings-item__actions">
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(ev)}>✎</button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(ev)}>✕</button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(ev)}><Pencil1Icon width={12} height={12} /></button>
+                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(ev)}><Cross2Icon width={12} height={12} /></button>
                 </div>
               </div>
             ))}

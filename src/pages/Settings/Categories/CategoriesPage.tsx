@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { PlusIcon, ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { categoriesService } from '../../../services/supabase/categories.service';
 import type { Category, CreateCategoryDTO, UpdateCategoryDTO } from '../../../types/category.types';
@@ -149,12 +150,12 @@ export function CategoriesPage() {
           {cat.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
           <div className="settings-item__actions">
             {level < 2 && (
-              <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openAdd(cat)} title={t('categories.add_sub')}>+</button>
+              <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openAdd(cat)} title={t('categories.add_sub')}><PlusIcon width={12} height={12} /></button>
             )}
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(cat, cats, -1)} disabled={idx === 0} title={t('common.move_up')}>↑</button>
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(cat, cats, 1)} disabled={idx === cats.length - 1} title={t('common.move_down')}>↓</button>
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(cat)} title={t('common.edit')}>✎</button>
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(cat)} title={t('common.delete')}>✕</button>
+            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(cat, cats, -1)} disabled={idx === 0} title={t('common.move_up')}><ArrowUpIcon width={12} height={12} /></button>
+            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(cat, cats, 1)} disabled={idx === cats.length - 1} title={t('common.move_down')}><ArrowDownIcon width={12} height={12} /></button>
+            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(cat)} title={t('common.edit')}><Pencil1Icon width={12} height={12} /></button>
+            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(cat)} title={t('common.delete')}><Cross2Icon width={12} height={12} /></button>
           </div>
         </div>
         {cat.children && cat.children.length > 0 && renderTree(cat.children, level + 1)}

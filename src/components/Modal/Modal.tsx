@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import './Modal.scss';
 
 interface ModalProps {
@@ -25,7 +26,9 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
       <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal aria-label={title}>
         <div className="modal__header">
           <h2 className="modal__title">{title}</h2>
-          <button className="modal__close" onClick={onClose} aria-label="Close">✕</button>
+          <button className="modal__close" onClick={onClose} aria-label="Close">
+            <Cross2Icon width={14} height={14} />
+          </button>
         </div>
         <div className="modal__body">{children}</div>
         {footer && <div className="modal__footer">{footer}</div>}

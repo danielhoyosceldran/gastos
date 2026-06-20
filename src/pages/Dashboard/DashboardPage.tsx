@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { expensesService } from '../../services/supabase/expenses.service';
 import { budgetsService } from '../../services/supabase/budgets.service';
 import type { Expense, CreateExpenseDTO } from '../../types/expense.types';
@@ -8,6 +9,7 @@ import { ExpenseForm } from '../Expenses/ExpenseForm';
 import { ConfirmDialog } from '../../components/ConfirmDialog/ConfirmDialog';
 import { toast } from '../../store/toast.store';
 import { useAuthStore } from '../../store/auth.store';
+import { useExpenseFormData } from '../../hooks/useExpenseFormData';
 import { formatCurrency, formatDate } from '../../lib/format';
 import './DashboardPage.scss';
 
@@ -36,6 +38,7 @@ function isBudgetActive(budget: Budget, year: number, month: number): boolean {
 export function DashboardPage() {
   const { t } = useTranslation();
   const { profile } = useAuthStore();
+  const fd = useExpenseFormData();
 
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -135,6 +138,13 @@ export function DashboardPage() {
     finally { setDeleteLoading(false); }
   }
 
+  function catName(id: string | null) {
+    if (!id) return null;
+    const cat = fd.categories.find((c) => c.id === id);
+    if (!cat) return null;
+    return cat.is_default ? t(cat.name) : cat.name;
+  }
+
   function rowColor(type: Expense['type']) {
     if (type === 'income') return 'var(--toast-success-text)';
     if (type === 'refund') return 'var(--toast-warning-text)';
@@ -149,9 +159,9 @@ export function DashboardPage() {
     <div className="dashboard">
       {/* Month nav */}
       <div className="dashboard__month-nav">
-        <button className="btn btn--ghost btn--icon" onClick={prevMonth} aria-label={t('dashboard.prev_month')}>‹</button>
+        <button className="btn btn--ghost btn--icon" onClick={prevMonth} aria-label={t('dashboard.prev_month')}><ChevronLeftIcon /></button>
         <span className="dashboard__month-label">{getMonthLabel(year, month, lang)}</span>
-        <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}>›</button>
+        <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}><ChevronRightIcon /></button>
       </div>
 
       {/* Totals */}
@@ -228,12 +238,24 @@ export function DashboardPage() {
             {expenses.map((exp) => (
               <div key={exp.id} className="dashboard__expense-row" onClick={() => openEdit(exp)}>
                 <div className="dashboard__expense-date">{formatDate(exp.date, lang)}</div>
-                <div className="dashboard__expense-desc">
-                  {exp.description ?? <span style={{ color: 'var(--text-disabled)' }}>{t(`expenses.type_${exp.type}`)}</span>}
+                <div className="dashboard__expense-main">
+                  <div className="dashboard__expense-desc">
+                    {exp.description ?? <span style={{ color: 'var(--text-disabled)' }}>{t(`expenses.type_${exp.type}`)}</span>}
+                  </div>
+                  {exp.category_id && (
+                    <div className="dashboard__expense-category">{catName(exp.category_id)}</div>
+                  )}
                 </div>
                 <div className="dashboard__expense-amount" style={{ color: rowColor(exp.type) }}>
                   {rowSign(exp.type)}{formatCurrency(exp.amount, exp.currency, lang)}
                 </div>
+                <button
+                  className="dashboard__expense-delete btn btn--ghost btn--icon btn--sm"
+                  onClick={(e) => { e.stopPropagation(); setDeleteTarget(exp); }}
+                  title={t('common.delete')}
+                >
+                  <Cross2Icon width={12} height={12} />
+                </button>
               </div>
             ))}
           </div>
