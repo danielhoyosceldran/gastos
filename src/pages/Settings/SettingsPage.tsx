@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useOutlet, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './SettingsPage.scss';
 
@@ -15,23 +15,40 @@ const SECTIONS = [
 
 export function SettingsPage() {
   const { t } = useTranslation();
+  const outlet = useOutlet();
+  const navigate = useNavigate();
+
+  const nav = (
+    <nav className="settings-nav" aria-label={t('nav.settings')}>
+      {SECTIONS.map(({ to, label }) => (
+        <NavLink
+          key={to}
+          to={to}
+          className={({ isActive }) => `settings-nav__link${isActive ? ' settings-nav__link--active' : ''}`}
+        >
+          {t(label)}
+        </NavLink>
+      ))}
+    </nav>
+  );
+
+  if (outlet) {
+    return (
+      <div className="settings-layout settings-layout--detail">
+        <button className="settings-back" onClick={() => navigate('/settings')}>
+          ← {t('nav.settings')}
+        </button>
+        <div className="settings-nav--desktop">{nav}</div>
+        <div className="settings-content">
+          <Outlet />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="settings-layout">
-      <nav className="settings-nav" aria-label={t('nav.settings')}>
-        {SECTIONS.map(({ to, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) => `settings-nav__link${isActive ? ' settings-nav__link--active' : ''}`}
-          >
-            {t(label)}
-          </NavLink>
-        ))}
-      </nav>
-      <div className="settings-content">
-        <Outlet />
-      </div>
+      {nav}
     </div>
   );
 }

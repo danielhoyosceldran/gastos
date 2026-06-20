@@ -67,3 +67,40 @@
   flex: 1;
   min-width: 0;
 }
+
+.settings-nav--desktop {
+  display: none;
+
+  @include md { display: block; }
+}
+
+.settings-back {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-family: $font-mono;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: $space-2 0;
+  margin-bottom: $space-4;
+  transition: var(--transition-swift);
+
+  &:hover { color: var(--text-primary); }
+
+  @include md { display: none; }
+}
+
+.settings-layout--detail {
+  @include md {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: $space-7;
+  }
+}

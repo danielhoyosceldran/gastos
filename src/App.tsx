@@ -45,7 +45,6 @@ function App() {
           <Route path="budgets" element={<BudgetsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="settings" element={<SettingsPage />}>
-            <Route index element={<Navigate to="categories" replace />} />
             <Route path="categories"      element={<CategoriesPage />} />
             <Route path="tags"            element={<TagsPage />} />
             <Route path="tag-groups"      element={<TagGroupsPage />} />
