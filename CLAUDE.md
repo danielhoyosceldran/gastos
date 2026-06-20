@@ -25,7 +25,7 @@ services on mutation). Default-vs-custom name resolution via `src/lib/displayNam
 
 Still server-side / process work pending:
 - Version the DB schema: only `supabase/migrations/006_analytics.sql` and
-  `007_restrict_grants.sql` are committed; run `supabase db pull` to backfill
+  `008_restrict_grants.sql` are committed; run `supabase db pull` to backfill
   the rest from `plan/db-specs.md`.
 
 ## Key rules
@@ -63,7 +63,7 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated;
 > ⚠️ NO conceder a `anon`. La app no lee tablas antes del login (auth via GoTrue,
 > `profiles` se lee tras iniciar sesión). Conceder a `anon` elimina defensa en
 > profundidad: cualquier política RLS ausente expondría datos sin autenticar.
-> Ver `supabase/migrations/007_restrict_grants.sql`.
+> Ver `supabase/migrations/008_restrict_grants.sql`.
 
 ---
 
