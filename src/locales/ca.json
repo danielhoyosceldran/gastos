@@ -244,5 +244,11 @@
     "credit_card": "Targeta de crèdit",
     "debit_card": "Targeta de dèbit",
     "transfer": "Transferència"
+  },
+  "pwa": {
+    "title": "Afegeix Gastos a la pantalla d'inici",
+    "ios_hint": "Prem el botó Compartir i després \"Afegir a l'inici\"",
+    "install": "Instal·lar",
+    "dismiss": "Tancar"
   }
 }

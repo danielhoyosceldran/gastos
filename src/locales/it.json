@@ -244,5 +244,11 @@
     "credit_card": "Carta di credito",
     "debit_card": "Carta di debito",
     "transfer": "Bonifico"
+  },
+  "pwa": {
+    "title": "Aggiungi Gastos alla schermata principale",
+    "ios_hint": "Premi Condividi poi \"Aggiungi a Home\"",
+    "install": "Installa",
+    "dismiss": "Chiudi"
   }
 }

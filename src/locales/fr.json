@@ -244,5 +244,11 @@
     "credit_card": "Carte de crédit",
     "debit_card": "Carte de débit",
     "transfer": "Virement"
+  },
+  "pwa": {
+    "title": "Ajouter Gastos à l'écran d'accueil",
+    "ios_hint": "Appuyez sur Partager puis \"Sur l'écran d'accueil\"",
+    "install": "Installer",
+    "dismiss": "Fermer"
   }
 }

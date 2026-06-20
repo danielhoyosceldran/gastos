@@ -17,6 +17,7 @@ import { ExportPage } from './pages/Export/ExportPage';
 import { AnalyticsPage } from './pages/Analytics/AnalyticsPage';
 import { AddExpensePage } from './pages/Expenses/AddExpensePage';
 import { ToastContainer } from './components/Toast/ToastContainer';
+import { PwaInstallBanner } from './components/PwaInstallBanner/PwaInstallBanner';
 
 function App() {
   const { session, profile } = useAuthStore();
@@ -25,6 +26,7 @@ function App() {
     <>
       <LoginPage />
       <ToastContainer />
+      <PwaInstallBanner />
     </>
   );
 
@@ -58,6 +60,7 @@ function App() {
         </Route>
       </Routes>
       <ToastContainer />
+      <PwaInstallBanner />
     </BrowserRouter>
   );
 }

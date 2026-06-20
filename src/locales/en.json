@@ -244,5 +244,11 @@
     "credit_card": "Credit card",
     "debit_card": "Debit card",
     "transfer": "Transfer"
+  },
+  "pwa": {
+    "title": "Add Gastos to your home screen",
+    "ios_hint": "Tap the Share button then \"Add to Home Screen\"",
+    "install": "Install",
+    "dismiss": "Dismiss"
   }
 }
