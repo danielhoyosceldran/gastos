@@ -14,7 +14,6 @@
   max-width: 400px;
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
-  border-radius: $radius-xl;
   padding: $space-7 $space-6;
 }
 
@@ -26,27 +25,25 @@
 }
 
 .login-brand-logo {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--color-primary), #a78bfa);
   color: #fff;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 11px;
+  font-family: $font-mono;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: $radius-sm;
-  letter-spacing: -0.02em;
   flex-shrink: 0;
 }
 
 .login-brand-name {
-  font-size: $font-small;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--text-primary);
-  opacity: 0.9;
 }
 
 .login-title {
@@ -58,7 +55,8 @@
 }
 
 .login-subtitle {
-  font-size: $font-small;
+  font-family: $font-mono;
+  font-size: 11px;
   color: var(--text-secondary);
   margin: 0 0 $space-6;
   line-height: 1.5;
@@ -76,29 +74,29 @@
   gap: $space-2;
 
   &__label {
+    font-family: $font-mono;
     font-size: 10px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    letter-spacing: 0.05em;
+    font-weight: 500;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
   }
 
   &__input {
-    background-color: var(--bg-surface-1);
+    background-color: var(--bg-base);
     color: var(--text-primary);
-    font-size: $font-body;
+    font-size: 12px;
     font-family: inherit;
-    padding: $space-3 $space-4;
+    padding: 10px 14px;
     width: 100%;
     box-sizing: border-box;
     border: 1px solid var(--border);
-    border-radius: $radius-md;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: var(--transition-swift);
 
     &:focus {
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px var(--color-primary-alpha);
+      box-shadow: 0 0 0 1px var(--color-primary);
     }
 
     &:disabled {
@@ -109,33 +107,36 @@
 }
 
 .login-error {
-  font-size: $font-small;
+  font-family: $font-mono;
+  font-size: 11px;
   color: var(--toast-error-text);
   background-color: var(--toast-error-bg);
   padding: $space-3 $space-4;
-  border-radius: $radius-md;
-  margin: 0;
-  border: 1px solid rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .login-btn {
   background-color: var(--color-primary);
   color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  font-family: inherit;
-  padding: $space-3 $space-4;
+  font-family: $font-mono;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px;
   width: 100%;
   cursor: pointer;
-  border-radius: $radius-md;
-  border: 1px solid var(--color-primary);
-  transition: background-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  border: none;
+  transition: var(--transition-swift);
   margin-top: $space-2;
 
   &:hover:not(:disabled) {
     background-color: var(--color-primary-dark);
     transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 
   &:disabled {

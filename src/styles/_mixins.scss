@@ -40,15 +40,15 @@ $bp-xl: 1280px;
 
 // Glassmorphism surface — for navbars and floating headers
 @mixin glass-dark {
-  background-color: rgba(13, 13, 20, 0.72);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(11, 11, 15, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 @mixin glass-light {
-  background-color: rgba(248, 250, 252, 0.8);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  background-color: rgba(248, 250, 252, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 // Gradient text (accent-colored headings)

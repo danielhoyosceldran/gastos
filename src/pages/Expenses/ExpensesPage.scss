@@ -14,10 +14,12 @@
   }
 
   &__title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+    font-family: $font-mono;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
     margin: 0;
   }
 
@@ -34,7 +36,8 @@
   }
 
   &__count {
-    font-size: $font-small;
+    font-family: $font-mono;
+    font-size: 10px;
     color: var(--text-secondary);
     margin: 0;
   }
@@ -48,7 +51,6 @@
   padding: $space-4;
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
-  border-radius: $radius-lg;
 
   &__grid {
     display: grid;
@@ -74,8 +76,9 @@
   padding: $space-8 $space-5;
   color: var(--text-secondary);
   border: 1px solid var(--border);
-  border-radius: $radius-lg;
   background-color: var(--bg-surface-1);
+  font-family: $font-mono;
+  font-size: 11px;
   text-align: center;
 }
 
@@ -83,9 +86,7 @@
 .expenses-list {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border);
-  border-radius: $radius-lg;
-  overflow: hidden;
+  gap: $space-2;
 }
 
 .expense-row {
@@ -93,20 +94,23 @@
   align-items: center;
   gap: $space-3;
   padding: $space-3 $space-4;
-  border-bottom: 1px solid var(--border);
   background-color: var(--bg-surface-1);
+  border: 1px solid var(--border);
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: var(--transition-swift);
 
-  &:last-child { border-bottom: none; }
-  &:hover { background-color: var(--bg-surface-2); }
+  &:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+  }
 
   &__date {
-    font-size: $font-small;
+    font-family: $font-mono;
+    font-size: 9px;
     color: var(--text-secondary);
     white-space: nowrap;
     flex-shrink: 0;
-    min-width: 90px;
+    min-width: 50px;
   }
 
   &__main {
@@ -118,7 +122,8 @@
   }
 
   &__desc {
-    font-size: $font-body;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--text-primary);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -129,33 +134,40 @@
     display: inline-block;
     font-family: $font-mono;
     font-size: 9px;
-    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
-    background-color: var(--bg-surface-2);
-    border: 1px solid var(--border);
-    border-radius: $radius-sm;
-    padding: 1px 6px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   &__amount {
-    font-size: $font-body;
-    font-weight: 600;
+    font-family: $font-mono;
+    font-size: 12px;
+    font-weight: 700;
     white-space: nowrap;
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.01em;
+    color: var(--text-primary);
+
+    &--income { color: var(--color-income); }
   }
 
   &__delete {
     flex-shrink: 0;
     opacity: 0;
-    transition: opacity 0.15s;
+    color: var(--text-secondary);
+    transition: var(--transition-swift);
   }
 
   &:hover &__delete {
-    opacity: 1;
+    opacity: 0.4;
+  }
+
+  &__delete:hover {
+    opacity: 1 !important;
+    color: var(--color-expense);
   }
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -26,9 +26,13 @@ const NAV_ITEMS: { to: string; label: string; Icon: RadixIcon; end: boolean }[] 
 
 export function AppLayout() {
   const { t } = useTranslation();
-  const [isDark, setIsDark] = useState(
-    () => document.documentElement.dataset.theme === 'dark'
-  );
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme') ?? 'dark';
+    document.documentElement.dataset.theme = saved;
+    setIsDark(saved === 'dark');
+  }, []);
 
   const handleSignOut = useCallback(async () => {
     try {

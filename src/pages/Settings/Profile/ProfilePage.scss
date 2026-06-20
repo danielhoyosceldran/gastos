@@ -9,11 +9,12 @@
 
 .profile-section {
   &__title {
+    font-family: $font-mono;
     font-size: 10px;
     font-weight: 700;
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     margin: 0 0 $space-3;
   }
 }
@@ -32,8 +33,11 @@
   }
 
   &__label {
-    font-size: $font-small;
+    font-family: $font-mono;
+    font-size: 10px;
     font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--text-secondary);
 
     @include sm {
@@ -62,14 +66,14 @@
   padding: $space-2 $space-4;
   background-color: transparent;
   color: var(--text-secondary);
-  font-size: 10px;
+  font-family: $font-mono;
+  font-size: 9px;
   font-weight: 500;
-  letter-spacing: 0.02em;
-  font-family: inherit;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   cursor: pointer;
   border: 1px solid var(--border);
-  border-radius: $radius-md;
-  transition: all 0.2s ease;
+  transition: var(--transition-swift);
 
   &:hover:not(:disabled) {
     border-color: var(--border-hover);
@@ -92,14 +96,14 @@
   padding: $space-2 $space-4;
   background-color: transparent;
   color: var(--text-secondary);
-  font-size: 10px;
+  font-family: $font-mono;
+  font-size: 9px;
   font-weight: 500;
-  letter-spacing: 0.02em;
-  font-family: inherit;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   cursor: pointer;
   border: 1px solid var(--border);
-  border-radius: $radius-md;
-  transition: all 0.2s ease;
+  transition: var(--transition-swift);
 
   &:hover:not(:disabled) {
     border-color: var(--border-hover);
@@ -116,7 +120,6 @@
     width: 12px;
     height: 12px;
     flex-shrink: 0;
-    border-radius: 3px;
   }
 
   &:disabled { opacity: 0.5; cursor: not-allowed; }

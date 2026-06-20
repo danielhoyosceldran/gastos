@@ -1,6 +1,6 @@
 // Typography
-$font-family: 'Inter', 'Geist Sans', system-ui, sans-serif;
-$font-mono: 'Fira Code', 'Geist Mono', 'Cascadia Code', monospace;
+$font-family: 'Inter', system-ui, -apple-system, sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 $font-display: 32px;
 $font-h1: 24px;
 $font-h2: 20px;
@@ -8,11 +8,11 @@ $font-h3: 16px;
 $font-body: 14px;
 $font-small: 12px;
 
-// Border radius
-$radius-sm: 6px;
-$radius-md: 8px;
-$radius-lg: 12px;
-$radius-xl: 16px;
+// Border radius — sharp corners, Motion.dev style
+$radius-sm: 0px;
+$radius-md: 0px;
+$radius-lg: 0px;
+$radius-xl: 0px;
 $radius-full: 9999px;
 
 // Border width

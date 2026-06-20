@@ -13,10 +13,12 @@
   }
 
   &__title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+    font-family: $font-mono;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
     margin: 0;
   }
 
@@ -27,7 +29,6 @@
     padding: $space-4;
     background: var(--bg-surface-1);
     border: 1px solid var(--border);
-    border-radius: $radius-lg;
   }
 
   &__grid {
@@ -47,10 +48,11 @@
   gap: $space-2;
 
   &__label {
+    font-family: $font-mono;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: var(--text-secondary);
   }
 
@@ -61,14 +63,12 @@
     select {
       padding: $space-2 $space-3;
       border: 1px solid var(--border);
-      background: var(--bg-surface-2);
+      background: var(--bg-base);
       color: var(--text-primary);
-      font-size: $font-body;
-      border-radius: $radius-md;
+      font-size: 12px;
 
       &:focus {
-        outline: 2px solid var(--color-primary);
-        outline-offset: 1px;
+        outline: 1px solid var(--color-primary);
       }
     }
   }
@@ -76,16 +76,14 @@
   &__input {
     padding: $space-2 $space-3;
     border: 1px solid var(--border);
-    background: var(--bg-surface-2);
+    background: var(--bg-base);
     color: var(--text-primary);
-    font-size: $font-body;
-    border-radius: $radius-md;
+    font-size: 12px;
     width: 5rem;
     text-transform: uppercase;
 
     &:focus {
-      outline: 2px solid var(--color-primary);
-      outline-offset: 1px;
+      outline: 1px solid var(--color-primary);
     }
   }
 }

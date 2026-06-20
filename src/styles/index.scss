@@ -11,11 +11,13 @@
   --color-primary: #6366f1;
   --color-primary-light: #818cf8;
   --color-primary-dark: #4f46e5;
-  --color-primary-alpha: rgba(99, 102, 241, 0.12);
+  --color-primary-alpha: rgba(99, 102, 241, 0.08);
 
   // Semantic
   --color-income: #10b981;
-  --color-expense: #f43f5e;
+  --color-income-light: rgba(16, 185, 129, 0.06);
+  --color-expense: #ef4444;
+  --color-expense-light: rgba(239, 68, 68, 0.06);
 
   // Radius (exposed as CSS vars for components)
   --radius-sm: #{$radius-sm};
@@ -24,60 +26,31 @@
   --radius-xl: #{$radius-xl};
   --radius-full: #{$radius-full};
 
-  // Light mode
-  --bg-base: #ffffff;
-  --bg-surface-1: #ffffff;
-  --bg-surface-2: #f1f5f9;
-  --bg-surface-3: #e2e8f0;
-  --border: rgba(0, 0, 0, 0.07);
-  --border-hover: rgba(0, 0, 0, 0.16);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-disabled: #94a3b8;
-  --text-mono: #334155;
+  // Motion
+  --transition-swift: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  // Nav (light)
-  --nav-bg: #0b0b0f;
+  // ── Dark mode as default ──────────────────────────────────────
+  --bg-base: #0b0b0f;
+  --bg-surface-1: #121218;
+  --bg-surface-2: #1a1a24;
+  --bg-surface-3: #22222e;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-disabled: #334155;
+  --text-mono: #a5b4fc;
+  --glow-effect: 0 0 20px rgba(99, 102, 241, 0.15);
+
+  // Nav (dark default)
+  --nav-bg: rgba(11, 11, 15, 0.75);
   --nav-border: rgba(255, 255, 255, 0.07);
   --nav-text: #64748b;
   --nav-text-hover: #f8fafc;
   --nav-active: #818cf8;
   --nav-active-bg: rgba(99, 102, 241, 0.1);
 
-  // Toast
-  --toast-info-bg: #eff6ff;
-  --toast-info-text: #1e40af;
-  --toast-info-icon: #3b82f6;
-  --toast-success-bg: #ecfdf5;
-  --toast-success-text: #065f46;
-  --toast-success-icon: #10b981;
-  --toast-error-bg: #fff1f2;
-  --toast-error-text: #9f1239;
-  --toast-error-icon: #f43f5e;
-  --toast-warning-bg: #fffbeb;
-  --toast-warning-text: #92400e;
-  --toast-warning-icon: #f59e0b;
-}
-
-[data-theme='dark'] {
-  --bg-base: #0b0b0f;
-  --bg-surface-1: #13131a;
-  --bg-surface-2: #1a1a24;
-  --bg-surface-3: #22222e;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.16);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-disabled: #334155;
-  --text-mono: #a5b4fc;
-
-  --nav-bg: rgba(13, 13, 20, 0.72);
-  --nav-border: rgba(255, 255, 255, 0.06);
-  --nav-text: #64748b;
-  --nav-text-hover: #f8fafc;
-  --nav-active: #818cf8;
-  --nav-active-bg: rgba(99, 102, 241, 0.1);
-
+  // Toast (dark)
   --toast-info-bg: rgba(30, 64, 175, 0.15);
   --toast-info-text: #93c5fd;
   --toast-info-icon: #60a5fa;
@@ -86,9 +59,43 @@
   --toast-success-icon: #10b981;
   --toast-error-bg: rgba(159, 18, 57, 0.18);
   --toast-error-text: #fda4af;
-  --toast-error-icon: #f43f5e;
+  --toast-error-icon: #ef4444;
   --toast-warning-bg: rgba(120, 53, 15, 0.18);
   --toast-warning-text: #fcd34d;
+  --toast-warning-icon: #f59e0b;
+}
+
+[data-theme='light'] {
+  --bg-base: #f8fafc;
+  --bg-surface-1: #ffffff;
+  --bg-surface-2: #f1f5f9;
+  --bg-surface-3: #e2e8f0;
+  --border: rgba(0, 0, 0, 0.06);
+  --border-hover: rgba(0, 0, 0, 0.14);
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-disabled: #94a3b8;
+  --text-mono: #334155;
+  --glow-effect: 0 4px 20px rgba(99, 102, 241, 0.05);
+
+  --nav-bg: rgba(248, 250, 252, 0.75);
+  --nav-border: rgba(0, 0, 0, 0.06);
+  --nav-text: #64748b;
+  --nav-text-hover: #0f172a;
+  --nav-active: #6366f1;
+  --nav-active-bg: rgba(99, 102, 241, 0.08);
+
+  --toast-info-bg: #eff6ff;
+  --toast-info-text: #1e40af;
+  --toast-info-icon: #3b82f6;
+  --toast-success-bg: #ecfdf5;
+  --toast-success-text: #065f46;
+  --toast-success-icon: #10b981;
+  --toast-error-bg: #fff1f2;
+  --toast-error-text: #9f1239;
+  --toast-error-icon: #ef4444;
+  --toast-warning-bg: #fffbeb;
+  --toast-warning-text: #92400e;
   --toast-warning-icon: #f59e0b;
 }
 
@@ -123,16 +130,19 @@ body {
   overflow: hidden;
 }
 
-#root {
-  height: 100dvh;
-  overflow: hidden;
-}
-
-// Subtle aurora spotlight (dark mode only)
-[data-theme='dark'] body {
+body {
   background-image:
     radial-gradient(ellipse at 15% -5%, rgba(99, 102, 241, 0.07) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 100%, rgba(79, 70, 229, 0.05) 0%, transparent 50%);
+}
+
+[data-theme='light'] body {
+  background-image: none;
+}
+
+#root {
+  height: 100dvh;
+  overflow: hidden;
 }
 
 // ── Utilities ─────────────────────────────────────────────────────

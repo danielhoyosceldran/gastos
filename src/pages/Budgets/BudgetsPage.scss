@@ -15,10 +15,12 @@
   }
 
   &__title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+    font-family: $font-mono;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
     margin: 0;
     flex-shrink: 0;
   }
@@ -39,8 +41,9 @@
   padding: $space-8 $space-5;
   color: var(--text-secondary);
   border: 1px solid var(--border);
-  border-radius: $radius-lg;
   background-color: var(--bg-surface-1);
+  font-family: $font-mono;
+  font-size: 11px;
   text-align: center;
 }
 
@@ -53,17 +56,17 @@
 .budget-card {
   background-color: var(--bg-surface-1);
   border: 1px solid var(--border);
-  border-radius: $radius-lg;
   padding: $space-5;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.15s ease;
+  transition: var(--transition-swift);
   display: flex;
   flex-direction: column;
   gap: $space-3;
 
   &:hover {
-    border-color: var(--border-hover);
+    border-color: var(--color-primary);
     transform: translateY(-2px);
+    box-shadow: var(--glow-effect);
   }
 
   &__header {
@@ -81,7 +84,7 @@
   }
 
   &__name {
-    font-size: $font-body;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-primary);
     overflow: hidden;
@@ -91,7 +94,10 @@
   }
 
   &__meta {
-    font-size: $font-small;
+    font-family: $font-mono;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -99,9 +105,8 @@
   }
 
   &__progress-bar {
-    height: 4px;
-    background-color: var(--bg-surface-3);
-    border-radius: $radius-full;
+    height: 2px;
+    background-color: var(--border);
     width: 100%;
     overflow: hidden;
   }
@@ -109,8 +114,7 @@
   &__progress-fill {
     height: 100%;
     background-color: var(--color-primary);
-    border-radius: $radius-full;
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 
     &--over {
       background-color: var(--color-expense);
@@ -124,6 +128,7 @@
   }
 
   &__spent {
+    font-family: $font-mono;
     font-size: $font-body;
     font-weight: 700;
     color: var(--text-primary);
@@ -134,6 +139,7 @@
   }
 
   &__limit {
+    font-family: $font-mono;
     font-size: $font-small;
     color: var(--text-secondary);
     font-variant-numeric: tabular-nums;

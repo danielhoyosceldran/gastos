@@ -8,7 +8,6 @@
     padding: $space-2 $space-3;
     background-color: var(--bg-surface-2);
     border: 1px solid var(--border);
-    border-radius: $radius-md;
     outline: none;
     color: var(--text-secondary);
     font-family: $font-mono;
@@ -29,15 +28,20 @@
     padding: $space-2 $space-3;
     background-color: var(--bg-surface-2);
     color: var(--text-secondary);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    font-family: inherit;
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
     border: 1px solid var(--border);
-    border-radius: $radius-md;
-    transition: all 0.2s ease;
+    transition: var(--transition-swift);
     white-space: nowrap;
+
+    &:hover {
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+    }
 
     &--active {
       background-color: var(--color-primary-alpha);
@@ -68,9 +72,11 @@
     padding: 3px $space-3;
     background-color: var(--bg-surface-2);
     border: 1px solid var(--border);
-    border-radius: $radius-full;
-    font-size: 10px;
+    font-family: $font-mono;
+    font-size: 9px;
     font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--text-primary);
 
     button {
