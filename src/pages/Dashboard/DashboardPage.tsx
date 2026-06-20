@@ -13,7 +13,7 @@ import { ConfirmDialog } from '../../components/ConfirmDialog/ConfirmDialog';
 import { toast } from '../../store/toast.store';
 import { useAuthStore } from '../../store/auth.store';
 import { useExpenseFormData } from '../../hooks/useExpenseFormData';
-import { formatCurrency, formatDate } from '../../lib/format';
+import { formatCurrency } from '../../lib/format';
 import './DashboardPage.scss';
 
 function getMonthLabel(year: number, month: number, language: string): string {
