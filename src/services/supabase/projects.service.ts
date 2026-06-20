@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { invalidateRefData } from '../../lib/refDataCache';
 import type { Project, CreateProjectDTO, UpdateProjectDTO } from '../../types/project.types';
 
 const TABLE = 'projects';
@@ -14,18 +15,21 @@ export const projectsService = {
   async create(dto: CreateProjectDTO): Promise<Project> {
     const { data, error } = await supabase.from(TABLE).insert(dto).select(COLS).single();
     if (error) throw error;
+    invalidateRefData();
     return data as Project;
   },
 
   async update(id: string, dto: UpdateProjectDTO): Promise<Project> {
     const { data, error } = await supabase.from(TABLE).update(dto).eq('id', id).select(COLS).single();
     if (error) throw error;
+    invalidateRefData();
     return data as Project;
   },
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async getBudgetCount(id: string): Promise<number> {

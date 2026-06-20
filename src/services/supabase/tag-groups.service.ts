@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { invalidateRefData } from '../../lib/refDataCache';
 import type { TagGroup, CreateTagGroupDTO, UpdateTagGroupDTO } from '../../types/tag.types';
 
 const TABLE = 'tag_groups';
@@ -21,6 +22,7 @@ export const tagGroupsService = {
       .select(COLS)
       .single();
     if (error) throw error;
+    invalidateRefData();
     return data as TagGroup;
   },
 
@@ -32,6 +34,7 @@ export const tagGroupsService = {
       .select(COLS)
       .single();
     if (error) throw error;
+    invalidateRefData();
     return data as TagGroup;
   },
 
@@ -45,10 +48,12 @@ export const tagGroupsService = {
 
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async reorder(id: string, position: number): Promise<void> {
     const { error } = await supabase.from(TABLE).update({ position }).eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 };

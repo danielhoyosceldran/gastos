@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { invalidateRefData } from '../../lib/refDataCache';
 import type { Category, CreateCategoryDTO, UpdateCategoryDTO } from '../../types/category.types';
 
 const TABLE = 'categories';
@@ -21,6 +22,7 @@ export const categoriesService = {
       .select(COLS)
       .single();
     if (error) throw error;
+    invalidateRefData();
     return data as Category;
   },
 
@@ -35,12 +37,14 @@ export const categoriesService = {
       .select(COLS)
       .single();
     if (error) throw error;
+    invalidateRefData();
     return data as Category;
   },
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async reorder(id: string, position: number): Promise<void> {
@@ -49,6 +53,7 @@ export const categoriesService = {
       .update({ position })
       .eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async getBudgetCount(id: string): Promise<number> {

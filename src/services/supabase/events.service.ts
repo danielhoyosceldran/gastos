@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { invalidateRefData } from '../../lib/refDataCache';
 import type { Event, CreateEventDTO, UpdateEventDTO } from '../../types/event.types';
 
 const TABLE = 'events';
@@ -14,18 +15,21 @@ export const eventsService = {
   async create(dto: CreateEventDTO): Promise<Event> {
     const { data, error } = await supabase.from(TABLE).insert(dto).select(COLS).single();
     if (error) throw error;
+    invalidateRefData();
     return data as Event;
   },
 
   async update(id: string, dto: UpdateEventDTO): Promise<Event> {
     const { data, error } = await supabase.from(TABLE).update(dto).eq('id', id).select(COLS).single();
     if (error) throw error;
+    invalidateRefData();
     return data as Event;
   },
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async getBudgetCount(id: string): Promise<number> {

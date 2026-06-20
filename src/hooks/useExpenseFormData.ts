@@ -5,6 +5,7 @@ import { tagGroupsService } from '../services/supabase/tag-groups.service';
 import { paymentMethodsService } from '../services/supabase/payment-methods.service';
 import { eventsService } from '../services/supabase/events.service';
 import { projectsService } from '../services/supabase/projects.service';
+import { getRefData, subscribeRefData } from '../lib/refDataCache';
 import type { Category } from '../types/category.types';
 import type { Tag, TagGroup } from '../types/tag.types';
 import type { PaymentMethod } from '../types/payment-method.types';
@@ -21,32 +22,42 @@ export interface ExpenseFormData {
   loading: boolean;
 }
 
+type RefData = Omit<ExpenseFormData, 'loading'>;
+
+const EMPTY: RefData = {
+  categories: [], tags: [], tagGroups: [], paymentMethods: [], events: [], projects: [],
+};
+
+async function loadAll(): Promise<RefData> {
+  const [categories, tags, tagGroups, paymentMethods, events, projects] = await Promise.all([
+    categoriesService.getAll(),
+    tagsService.getAll(),
+    tagGroupsService.getAll(),
+    paymentMethodsService.getAll(),
+    eventsService.getAll(),
+    projectsService.getAll(),
+  ]);
+  return { categories, tags, tagGroups, paymentMethods, events, projects };
+}
+
 export function useExpenseFormData(): ExpenseFormData {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [tagGroups, setTagGroups] = useState<TagGroup[]>([]);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [data, setData] = useState<RefData>(EMPTY);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      categoriesService.getAll(),
-      tagsService.getAll(),
-      tagGroupsService.getAll(),
-      paymentMethodsService.getAll(),
-      eventsService.getAll(),
-      projectsService.getAll(),
-    ]).then(([c, t, tg, pm, ev, pr]) => {
-      setCategories(c);
-      setTags(t);
-      setTagGroups(tg);
-      setPaymentMethods(pm);
-      setEvents(ev);
-      setProjects(pr);
-    }).finally(() => setLoading(false));
+    let active = true;
+
+    function run() {
+      setLoading(true);
+      getRefData(loadAll)
+        .then((d) => { if (active) setData(d); })
+        .finally(() => { if (active) setLoading(false); });
+    }
+
+    run();
+    const unsubscribe = subscribeRefData(run);
+    return () => { active = false; unsubscribe(); };
   }, []);
 
-  return { categories, tags, tagGroups, paymentMethods, events, projects, loading };
+  return { ...data, loading };
 }

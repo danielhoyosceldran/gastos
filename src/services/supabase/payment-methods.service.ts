@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { invalidateRefData } from '../../lib/refDataCache';
 import type { PaymentMethod, CreatePaymentMethodDTO, UpdatePaymentMethodDTO } from '../../types/payment-method.types';
 
 const TABLE = 'payment_methods';
@@ -14,6 +15,7 @@ export const paymentMethodsService = {
   async create(dto: CreatePaymentMethodDTO): Promise<PaymentMethod> {
     const { data, error } = await supabase.from(TABLE).insert(dto).select(COLS).single();
     if (error) throw error;
+    invalidateRefData();
     return data as PaymentMethod;
   },
 
@@ -21,16 +23,19 @@ export const paymentMethodsService = {
     if (dto.name !== undefined) dto = { ...dto, is_default: false };
     const { data, error } = await supabase.from(TABLE).update(dto).eq('id', id).select(COLS).single();
     if (error) throw error;
+    invalidateRefData();
     return data as PaymentMethod;
   },
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async reorder(id: string, position: number): Promise<void> {
     const { error } = await supabase.from(TABLE).update({ position }).eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 };

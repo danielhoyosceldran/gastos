@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { invalidateRefData } from '../../lib/refDataCache';
 import type { Tag, CreateTagDTO, UpdateTagDTO } from '../../types/tag.types';
 
 const TABLE = 'tags';
@@ -21,6 +22,7 @@ export const tagsService = {
       .select(COLS)
       .single();
     if (error) throw error;
+    invalidateRefData();
     return data as Tag;
   },
 
@@ -35,16 +37,19 @@ export const tagsService = {
       .select(COLS)
       .single();
     if (error) throw error;
+    invalidateRefData();
     return data as Tag;
   },
 
   async delete(id: string): Promise<void> {
     const { error } = await supabase.from(TABLE).delete().eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 
   async reorder(id: string, position: number): Promise<void> {
     const { error } = await supabase.from(TABLE).update({ position }).eq('id', id);
     if (error) throw error;
+    invalidateRefData();
   },
 };
