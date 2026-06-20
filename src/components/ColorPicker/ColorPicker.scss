@@ -6,8 +6,8 @@
   gap: $space-2;
 
   &__none {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     background-color: var(--bg-surface-2);
     border: 1px solid var(--border);
     border-radius: $radius-sm;
@@ -25,8 +25,8 @@
   }
 
   &__swatch {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     border: 2px solid transparent;
     border-radius: $radius-sm;
     flex-shrink: 0;
