@@ -1,4 +1,4 @@
--- 007: Restrict table/sequence privileges to the authenticated role only.
+-- 008: Restrict table/sequence privileges to the authenticated role only.
 --
 -- Background: earlier troubleshooting granted ALL privileges to the `anon`
 -- role as well. RLS still gates row access, but giving `anon` table-level
