@@ -19,8 +19,8 @@ type RadixIcon = React.ForwardRefExoticComponent<IconProps & React.RefAttributes
 
 const NAV_ITEMS: { to: string; label: string; Icon: RadixIcon; end: boolean }[] = [
   { to: '/',          label: 'nav.dashboard', Icon: DashboardIcon, end: true  },
-  { to: '/budgets',   label: 'nav.budgets',   Icon: TargetIcon,    end: false },
   { to: '/analytics', label: 'nav.analytics', Icon: BarChartIcon,  end: false },
+  { to: '/budgets',   label: 'nav.budgets',   Icon: TargetIcon,    end: false },
   { to: '/settings',  label: 'nav.settings',  Icon: GearIcon,      end: false },
 ];
 
