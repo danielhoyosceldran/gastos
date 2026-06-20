@@ -1,0 +1,23 @@
+@use '../../styles/variables' as *;
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--text-disabled);
+  cursor: grab;
+  border-radius: $radius-sm;
+  flex-shrink: 0;
+  touch-action: none;
+
+  &:hover {
+    color: var(--text-secondary);
+    background-color: var(--bg-surface-2);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}

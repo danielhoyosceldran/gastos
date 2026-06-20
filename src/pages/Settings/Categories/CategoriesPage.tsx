@@ -1,12 +1,29 @@
 import { useState, useEffect, useCallback } from 'react';
-import { PlusIcon, ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
+import { PlusIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  KeyboardSensor,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { categoriesService } from '../../../services/supabase/categories.service';
 import type { Category, CreateCategoryDTO, UpdateCategoryDTO } from '../../../types/category.types';
 import { Modal } from '../../../components/Modal/Modal';
 import { ConfirmDialog } from '../../../components/ConfirmDialog/ConfirmDialog';
 import { ColorPicker } from '../../../components/ColorPicker/ColorPicker';
 import { toast } from '../../../store/toast.store';
+import { SortableItem } from '../../../components/SortableList/SortableItem';
+import { DragHandle } from '../../../components/DragHandle/DragHandle';
 import '../../../components/SettingsList/SettingsList.scss';
 
 type FormData = { name: string; color: string | null; icon: string | null };
@@ -34,6 +51,74 @@ function countDepth(cat: Category, allFlat: Category[]): number {
     current = allFlat.find((c) => c.id === current!.parent_id);
   }
   return depth;
+}
+
+interface SortableCatLevelProps {
+  cats: Category[];
+  level: number;
+  onReorder: (newOrder: Category[]) => void;
+  onOpenAdd: (cat: Category) => void;
+  onOpenEdit: (cat: Category) => void;
+  onOpenDelete: (cat: Category) => void;
+  renderName: (cat: Category) => string;
+  t: (key: string) => string;
+}
+
+function SortableCatLevel({ cats, level, onReorder, onOpenAdd, onOpenEdit, onOpenDelete, renderName, t }: SortableCatLevelProps) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIdx = cats.findIndex((c) => c.id === active.id);
+    const newIdx = cats.findIndex((c) => c.id === over.id);
+    onReorder(arrayMove(cats, oldIdx, newIdx));
+  }
+
+  const levelClass = level === 1 ? 'settings-item--sub' : level === 2 ? 'settings-item--sub2' : '';
+
+  return (
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={cats.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+        {cats.map((cat) => (
+          <SortableItem key={cat.id} id={cat.id}>
+            {(handleProps) => (
+              <div>
+                <div className={`settings-item ${levelClass}`}>
+                  <span className="settings-item__color" style={{ backgroundColor: cat.color ?? 'transparent' }} />
+                  <span className="settings-item__name">{renderName(cat)}</span>
+                  {cat.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
+                  <div className="settings-item__actions">
+                    {level < 2 && (
+                      <button className="btn btn--ghost btn--icon btn--sm" onClick={() => onOpenAdd(cat)} title={t('categories.add_sub')}><PlusIcon width={12} height={12} /></button>
+                    )}
+                    <button className="btn btn--ghost btn--icon btn--sm" onClick={() => onOpenEdit(cat)} title={t('common.edit')}><Pencil1Icon width={12} height={12} /></button>
+                    <button className="btn btn--ghost btn--icon btn--sm" onClick={() => onOpenDelete(cat)} title={t('common.delete')}><Cross2Icon width={12} height={12} /></button>
+                    <DragHandle {...handleProps} />
+                  </div>
+                </div>
+                {cat.children && cat.children.length > 0 && (
+                  <SortableCatLevel
+                    cats={cat.children}
+                    level={level + 1}
+                    onReorder={onReorder}
+                    onOpenAdd={onOpenAdd}
+                    onOpenEdit={onOpenEdit}
+                    onOpenDelete={onOpenDelete}
+                    renderName={renderName}
+                    t={t}
+                  />
+                )}
+              </div>
+            )}
+          </SortableItem>
+        ))}
+      </SortableContext>
+    </DndContext>
+  );
 }
 
 export function CategoriesPage() {
@@ -120,49 +205,19 @@ export function CategoriesPage() {
     }
   }
 
-  async function move(cat: Category, siblings: Category[], dir: -1 | 1) {
-    const idx = siblings.findIndex((c) => c.id === cat.id);
-    const swapIdx = idx + dir;
-    if (swapIdx < 0 || swapIdx >= siblings.length) return;
-    const swap = siblings[swapIdx];
-    await Promise.all([
-      categoriesService.reorder(cat.id, swap.position),
-      categoriesService.reorder(swap.id, cat.position),
-    ]);
-    setFlat((prev) => prev.map((c) => {
-      if (c.id === cat.id) return { ...c, position: swap.position };
-      if (c.id === swap.id) return { ...c, position: cat.position };
-      return c;
-    }));
+  async function handleReorder(newOrder: Category[]) {
+    setFlat((prev) => {
+      const updated = [...prev];
+      newOrder.forEach((cat, idx) => {
+        const i = updated.findIndex((c) => c.id === cat.id);
+        if (i >= 0) updated[i] = { ...updated[i], position: idx };
+      });
+      return updated;
+    });
+    await Promise.all(newOrder.map((cat, idx) => categoriesService.reorder(cat.id, idx)));
   }
 
-  function renderName(cat: Category) {
-    return cat.is_default ? t(cat.name) : cat.name;
-  }
-
-  function renderTree(cats: Category[], level: number): React.ReactNode {
-    const levelClass = level === 1 ? 'settings-item--sub' : level === 2 ? 'settings-item--sub2' : '';
-    return cats.map((cat, idx) => (
-      <div key={cat.id}>
-        <div className={`settings-item ${levelClass}`}>
-          <span className="settings-item__color" style={{ backgroundColor: cat.color ?? 'transparent' }} />
-          <span className="settings-item__name">{renderName(cat)}</span>
-          {cat.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
-          <div className="settings-item__actions">
-            {level < 2 && (
-              <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openAdd(cat)} title={t('categories.add_sub')}><PlusIcon width={12} height={12} /></button>
-            )}
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(cat, cats, -1)} disabled={idx === 0} title={t('common.move_up')}><ArrowUpIcon width={12} height={12} /></button>
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(cat, cats, 1)} disabled={idx === cats.length - 1} title={t('common.move_down')}><ArrowDownIcon width={12} height={12} /></button>
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(cat)} title={t('common.edit')}><Pencil1Icon width={12} height={12} /></button>
-            <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openDelete(cat)} title={t('common.delete')}><Cross2Icon width={12} height={12} /></button>
-          </div>
-        </div>
-        {cat.children && cat.children.length > 0 && renderTree(cat.children, level + 1)}
-      </div>
-    ));
-  }
-
+  const renderName = (cat: Category) => cat.is_default ? t(cat.name) : cat.name;
   const tree = buildTree([...flat].sort((a, b) => a.position - b.position));
 
   const modalTitle = editTarget
@@ -185,7 +240,18 @@ export function CategoriesPage() {
       ) : flat.length === 0 ? (
         <div className="settings-empty">{t('categories.empty')}</div>
       ) : (
-        <div className="settings-list">{renderTree(tree, 0)}</div>
+        <div className="settings-list">
+          <SortableCatLevel
+            cats={tree}
+            level={0}
+            onReorder={handleReorder}
+            onOpenAdd={openAdd}
+            onOpenEdit={openEdit}
+            onOpenDelete={openDelete}
+            renderName={renderName}
+            t={t as (key: string) => string}
+          />
+        </div>
       )}
 
       <Modal

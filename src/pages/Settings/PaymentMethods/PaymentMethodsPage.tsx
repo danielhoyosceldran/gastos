@@ -1,11 +1,28 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
+import { Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  KeyboardSensor,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { paymentMethodsService } from '../../../services/supabase/payment-methods.service';
 import type { PaymentMethod } from '../../../types/payment-method.types';
 import { Modal } from '../../../components/Modal/Modal';
 import { ConfirmDialog } from '../../../components/ConfirmDialog/ConfirmDialog';
 import { toast } from '../../../store/toast.store';
+import { SortableItem } from '../../../components/SortableList/SortableItem';
+import { DragHandle } from '../../../components/DragHandle/DragHandle';
 import '../../../components/SettingsList/SettingsList.scss';
 
 export function PaymentMethodsPage() {
@@ -19,6 +36,11 @@ export function PaymentMethodsPage() {
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<PaymentMethod | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   const load = useCallback(async () => {
     try { setItems(await paymentMethodsService.getAll()); }
@@ -65,18 +87,15 @@ export function PaymentMethodsPage() {
     finally { setDeleteLoading(false); }
   }
 
-  async function move(pm: PaymentMethod, dir: -1 | 1) {
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
     const sorted = [...items].sort((a, b) => a.position - b.position);
-    const idx = sorted.findIndex((x) => x.id === pm.id);
-    const swapIdx = idx + dir;
-    if (swapIdx < 0 || swapIdx >= sorted.length) return;
-    const swap = sorted[swapIdx];
-    await Promise.all([paymentMethodsService.reorder(pm.id, swap.position), paymentMethodsService.reorder(swap.id, pm.position)]);
-    setItems((prev) => prev.map((x) => {
-      if (x.id === pm.id) return { ...x, position: swap.position };
-      if (x.id === swap.id) return { ...x, position: pm.position };
-      return x;
-    }));
+    const oldIdx = sorted.findIndex((x) => x.id === active.id);
+    const newIdx = sorted.findIndex((x) => x.id === over.id);
+    const newOrder = arrayMove(sorted, oldIdx, newIdx);
+    setItems(newOrder.map((x, i) => ({ ...x, position: i })));
+    await Promise.all(newOrder.map((x, i) => paymentMethodsService.reorder(x.id, i)));
   }
 
   const sorted = [...items].sort((a, b) => a.position - b.position);
@@ -91,21 +110,28 @@ export function PaymentMethodsPage() {
       {loading ? <p style={{ color: 'var(--text-secondary)' }}>{t('common.loading')}</p>
         : sorted.length === 0 ? <div className="settings-empty">{t('payment_methods.empty')}</div>
         : (
-          <div className="settings-list">
-            {sorted.map((pm, idx) => (
-              <div key={pm.id} className="settings-item">
-                {pm.icon && <span style={{ fontSize: '16px' }}>{pm.icon}</span>}
-                <span className="settings-item__name">{renderName(pm)}</span>
-                {pm.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
-                <div className="settings-item__actions">
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(pm, -1)} disabled={idx === 0}><ArrowUpIcon width={12} height={12} /></button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(pm, 1)} disabled={idx === sorted.length - 1}><ArrowDownIcon width={12} height={12} /></button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(pm)}><Pencil1Icon width={12} height={12} /></button>
-                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(pm)}><Cross2Icon width={12} height={12} /></button>
-                </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={sorted.map((x) => x.id)} strategy={verticalListSortingStrategy}>
+              <div className="settings-list">
+                {sorted.map((pm) => (
+                  <SortableItem key={pm.id} id={pm.id}>
+                    {(handleProps) => (
+                      <div className="settings-item">
+                        {pm.icon && <span style={{ fontSize: '16px' }}>{pm.icon}</span>}
+                        <span className="settings-item__name">{renderName(pm)}</span>
+                        {pm.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
+                        <div className="settings-item__actions">
+                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(pm)}><Pencil1Icon width={12} height={12} /></button>
+                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(pm)}><Cross2Icon width={12} height={12} /></button>
+                          <DragHandle {...handleProps} />
+                        </div>
+                      </div>
+                    )}
+                  </SortableItem>
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+          </DndContext>
         )}
 
       <Modal open={formOpen} title={editTarget ? t('common.edit') : t('common.add')} onClose={() => setFormOpen(false)}

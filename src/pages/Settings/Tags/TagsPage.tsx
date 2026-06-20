@@ -1,6 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ArrowUpIcon, ArrowDownIcon, Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
+import { Pencil1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  KeyboardSensor,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { tagsService } from '../../../services/supabase/tags.service';
 import { tagGroupsService } from '../../../services/supabase/tag-groups.service';
 import type { Tag, TagGroup } from '../../../types/tag.types';
@@ -8,6 +23,8 @@ import { Modal } from '../../../components/Modal/Modal';
 import { ConfirmDialog } from '../../../components/ConfirmDialog/ConfirmDialog';
 import { ColorPicker } from '../../../components/ColorPicker/ColorPicker';
 import { toast } from '../../../store/toast.store';
+import { SortableItem } from '../../../components/SortableList/SortableItem';
+import { DragHandle } from '../../../components/DragHandle/DragHandle';
 import '../../../components/SettingsList/SettingsList.scss';
 
 type FormData = { name: string; color: string | null; icon: string | null; tag_group_id: string };
@@ -23,6 +40,11 @@ export function TagsPage() {
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Tag | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   const load = useCallback(async () => {
     try {
@@ -83,17 +105,20 @@ export function TagsPage() {
     finally { setDeleteLoading(false); }
   }
 
-  async function move(tag: Tag, siblings: Tag[], dir: -1 | 1) {
-    const idx = siblings.findIndex((t) => t.id === tag.id);
-    const swapIdx = idx + dir;
-    if (swapIdx < 0 || swapIdx >= siblings.length) return;
-    const swap = siblings[swapIdx];
-    await Promise.all([tagsService.reorder(tag.id, swap.position), tagsService.reorder(swap.id, tag.position)]);
-    setTags((prev) => prev.map((t) => {
-      if (t.id === tag.id) return { ...t, position: swap.position };
-      if (t.id === swap.id) return { ...t, position: tag.position };
-      return t;
-    }));
+  function makeGroupDragHandler(groupId: string) {
+    return async (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (!over || active.id === over.id) return;
+      const groupTags = [...tags.filter((t) => t.tag_group_id === groupId)].sort((a, b) => a.position - b.position);
+      const oldIdx = groupTags.findIndex((x) => x.id === active.id);
+      const newIdx = groupTags.findIndex((x) => x.id === over.id);
+      const newOrder = arrayMove(groupTags, oldIdx, newIdx);
+      setTags((prev) => prev.map((tag) => {
+        const orderIdx = newOrder.findIndex((x) => x.id === tag.id);
+        return orderIdx >= 0 ? { ...tag, position: orderIdx } : tag;
+      }));
+      await Promise.all(newOrder.map((tag, i) => tagsService.reorder(tag.id, i)));
+    };
   }
 
   const renderTagName = (tag: Tag) => tag.is_default ? t(tag.name) : tag.name;
@@ -119,21 +144,28 @@ export function TagsPage() {
               {groupTags.length === 0
                 ? <div className="settings-empty" style={{ padding: '16px' }}>{t('tags.empty_group')}</div>
                 : (
-                  <div className="settings-list">
-                    {groupTags.map((tag, idx) => (
-                      <div key={tag.id} className="settings-item">
-                        <span className="settings-item__color" style={{ backgroundColor: tag.color ?? 'transparent' }} />
-                        <span className="settings-item__name">{renderTagName(tag)}</span>
-                        {tag.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
-                        <div className="settings-item__actions">
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(tag, groupTags, -1)} disabled={idx === 0}><ArrowUpIcon width={12} height={12} /></button>
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => move(tag, groupTags, 1)} disabled={idx === groupTags.length - 1}><ArrowDownIcon width={12} height={12} /></button>
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(tag)}><Pencil1Icon width={12} height={12} /></button>
-                          <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(tag)}><Cross2Icon width={12} height={12} /></button>
-                        </div>
+                  <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={makeGroupDragHandler(group.id)}>
+                    <SortableContext items={groupTags.map((x) => x.id)} strategy={verticalListSortingStrategy}>
+                      <div className="settings-list">
+                        {groupTags.map((tag) => (
+                          <SortableItem key={tag.id} id={tag.id}>
+                            {(handleProps) => (
+                              <div className="settings-item">
+                                <span className="settings-item__color" style={{ backgroundColor: tag.color ?? 'transparent' }} />
+                                <span className="settings-item__name">{renderTagName(tag)}</span>
+                                {tag.is_default && <span className="settings-item__default-badge">{t('common.default')}</span>}
+                                <div className="settings-item__actions">
+                                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => openEdit(tag)}><Pencil1Icon width={12} height={12} /></button>
+                                  <button className="btn btn--ghost btn--icon btn--sm" onClick={() => setDeleteTarget(tag)}><Cross2Icon width={12} height={12} /></button>
+                                  <DragHandle {...handleProps} />
+                                </div>
+                              </div>
+                            )}
+                          </SortableItem>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </SortableContext>
+                  </DndContext>
                 )}
             </div>
           );

@@ -146,13 +146,9 @@ export function DashboardPage() {
   }
 
   function rowColor(type: Expense['type']) {
-    if (type === 'income') return 'var(--toast-success-text)';
-    if (type === 'refund') return 'var(--toast-warning-text)';
-    return 'var(--text-primary)';
-  }
-
-  function rowSign(type: Expense['type']) {
-    return type === 'income' ? '+' : type === 'refund' ? '±' : '-';
+    if (type === 'income') return '#22c55e';
+    if (type === 'refund') return '#3b82f6';
+    return '#ef4444';
   }
 
   return (
@@ -237,7 +233,6 @@ export function DashboardPage() {
           <div className="dashboard__expense-list">
             {expenses.map((exp) => (
               <div key={exp.id} className="dashboard__expense-row" onClick={() => openEdit(exp)}>
-                <div className="dashboard__expense-date">{formatDate(exp.date, lang)}</div>
                 <div className="dashboard__expense-main">
                   <div className="dashboard__expense-desc">
                     {exp.description ?? <span style={{ color: 'var(--text-disabled)' }}>{t(`expenses.type_${exp.type}`)}</span>}
@@ -247,7 +242,7 @@ export function DashboardPage() {
                   )}
                 </div>
                 <div className="dashboard__expense-amount" style={{ color: rowColor(exp.type) }}>
-                  {rowSign(exp.type)}{formatCurrency(exp.amount, exp.currency, lang)}
+                  {formatCurrency(exp.amount, exp.currency, lang)}
                 </div>
                 <button
                   className="dashboard__expense-delete btn btn--ghost btn--icon btn--sm"
