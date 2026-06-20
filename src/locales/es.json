@@ -42,6 +42,7 @@
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",
+    "done": "Listo",
     "delete": "Eliminar",
     "edit": "Editar",
     "add": "Añadir",

@@ -42,6 +42,7 @@
   "common": {
     "save": "Enregistrer",
     "cancel": "Annuler",
+    "done": "Terminé",
     "delete": "Supprimer",
     "edit": "Modifier",
     "add": "Ajouter",

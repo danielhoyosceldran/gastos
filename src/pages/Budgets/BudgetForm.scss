@@ -1,47 +1,203 @@
 @use '../../styles/variables' as *;
 
-.budget-form {
-  &__currency {
-    min-height: 38px;
+.budget-form-page {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--bg-base);
+
+  // ── Header ──────────────────────────────────────────
+  &__header {
     display: flex;
     align-items: center;
-    padding: $space-2 $space-3;
-    background-color: var(--bg-surface-2);
-    border: 1px solid var(--border);
-    outline: none;
-    color: var(--text-secondary);
+    gap: $space-3;
+    padding: $space-3 $space-4;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    flex: 1;
+    font-size: $font-h3;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  // ── Scrollable fields ────────────────────────────────
+  &__fields {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  // ── Amount row ──────────────────────────────────────
+  &__amount-row {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-4;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition-swift);
+
+    &--active {
+      background-color: var(--bg-surface-1);
+      border-left: 2px solid var(--color-primary);
+    }
+  }
+
+  &__amount-value {
+    font-family: $font-mono;
+    font-size: $font-h2;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+
+    &--placeholder { color: var(--text-disabled); }
+  }
+
+  &__amount-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex: 1;
+  }
+
+  &__amount-input {
+    flex: 1;
+    font-family: $font-mono;
+    font-size: $font-h3;
+    font-weight: 600;
+  }
+
+  &__currency {
     font-family: $font-mono;
     font-size: $font-body;
-    font-weight: 500;
+    color: var(--text-secondary);
     white-space: nowrap;
   }
 
-  &__type-row {
+  // ── Field rows ────────────────────────────────────────
+  &__field-row {
     display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-3 $space-4;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: var(--transition-swift);
+    min-height: 48px;
+
+    &:hover { background-color: var(--bg-surface-1); }
+
+    &--active {
+      background-color: var(--bg-surface-1);
+      border-left: 2px solid var(--color-primary);
+    }
+
+    &--text {
+      cursor: default;
+      &:hover { background-color: transparent; }
+    }
+
+    &--inline {
+      cursor: default;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      padding-top: $space-3;
+      &:hover { background-color: transparent; }
+    }
+
+    &--chips {
+      align-items: flex-start;
+      cursor: default;
+      flex-wrap: wrap;
+      &:hover { background-color: transparent; }
+    }
+  }
+
+  &__field-label {
+    font-family: $font-mono;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-disabled);
+    width: 80px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  &__field-value {
+    flex: 1;
+    font-size: $font-body;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--placeholder { color: var(--text-disabled); }
+  }
+
+  &__field-chevron {
+    color: var(--text-disabled);
+    flex-shrink: 0;
+  }
+
+  &__clear-btn {
+    background: none;
+    border: none;
+    color: var(--text-disabled);
+    font-size: 10px;
+    cursor: pointer;
+    padding: 0 $space-1;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+
+    &:hover { color: var(--color-expense); }
+  }
+
+  &__inline-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: $font-family;
+    font-size: $font-body;
+    color: var(--text-primary);
+    padding: 0;
+
+    &::placeholder { color: var(--text-disabled); }
+  }
+
+  &__btn-row {
+    display: flex;
+    flex: 1;
     gap: $space-2;
     flex-wrap: wrap;
   }
 
-  &__type-btn {
-    flex: 1;
-    min-width: 80px;
-    padding: $space-2 $space-3;
+  &__seg-btn {
+    flex: 0 0 auto;
+    padding: $space-1 $space-2;
     background-color: var(--bg-surface-2);
     color: var(--text-secondary);
     font-family: $font-mono;
     font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
     border: 1px solid var(--border);
     transition: var(--transition-swift);
     white-space: nowrap;
 
-    &:hover {
-      color: var(--text-primary);
-      border-color: var(--border-hover);
-    }
+    &:hover { color: var(--text-primary); border-color: var(--border-hover); }
 
     &--active {
       background-color: var(--color-primary-alpha);
@@ -50,22 +206,14 @@
     }
   }
 
-  &__months-add {
+  &__chips {
     display: flex;
-    gap: $space-2;
-    align-items: center;
-    margin-bottom: $space-2;
-
-    .field__input { flex: 1; }
-  }
-
-  &__months-list {
-    display: flex;
+    flex: 1;
     flex-wrap: wrap;
     gap: $space-2;
   }
 
-  &__month-chip {
+  &__chip {
     display: inline-flex;
     align-items: center;
     gap: $space-2;
@@ -85,8 +233,155 @@
       cursor: pointer;
       line-height: 1;
       transition: color 0.15s;
-
       &:hover { color: var(--color-expense); }
+    }
+  }
+
+  // ── Save bar ─────────────────────────────────────────
+  &__save-bar {
+    display: flex;
+    gap: $space-2;
+    padding: $space-3 $space-4;
+    border-top: 1px solid var(--border);
+    background-color: var(--bg-base);
+    flex-shrink: 0;
+  }
+
+  &__save-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  &__next-btn {
+    flex-shrink: 0;
+    padding: $space-2 $space-4;
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-family: $font-mono;
+    font-size: $font-body;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-swift);
+
+    &:hover { border-color: var(--border-hover); color: var(--text-primary); }
+  }
+
+  // ── Bottom panel ─────────────────────────────────────
+  &__panel {
+    flex-shrink: 0;
+    height: 0;
+    overflow: hidden;
+    border-top: 1px solid transparent;
+    transition: height 0.2s ease, border-color 0.2s ease;
+
+    &--open {
+      height: 300px;
+      border-color: var(--border);
+
+      @media (min-width: 768px) {
+        height: 320px;
+      }
+    }
+  }
+}
+
+// ── Month picker ─────────────────────────────────────────────
+.month-picker {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-2 $space-4;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  &__nav {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: $font-h3;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 $space-3;
+    line-height: 1;
+    transition: var(--transition-swift);
+
+    &:hover { color: var(--text-primary); }
+  }
+
+  &__year {
+    font-family: $font-mono;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+  }
+
+  &__grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $space-2;
+    padding: $space-3 $space-4;
+    align-content: center;
+    overflow: hidden;
+  }
+
+  &__month {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-family: $font-mono;
+    font-size: $font-body;
+    font-weight: 500;
+    cursor: pointer;
+    height: 44px;
+    transition: var(--transition-swift);
+    position: relative;
+
+    &:hover {
+      background-color: var(--bg-surface-2);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+
+    &--today {
+      color: var(--color-primary);
+      font-weight: 700;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: var(--color-primary);
+      }
+    }
+
+    &--selected {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+      font-weight: 700;
+
+      &::after { background-color: #fff; }
+
+      &:hover { opacity: 0.88; }
     }
   }
 }
