@@ -118,7 +118,7 @@ export function TagsPage() {
         const orderIdx = newOrder.findIndex((x) => x.id === tag.id);
         return orderIdx >= 0 ? { ...tag, position: orderIdx } : tag;
       }));
-      await Promise.all(newOrder.map((tag, i) => tagsService.reorder(tag.id, i)));
+      await tagsService.reorderAll(newOrder.map((tag) => tag.id));
     };
   }
 

@@ -51,8 +51,8 @@ export const tagGroupsService = {
     invalidateRefData();
   },
 
-  async reorder(id: string, position: number): Promise<void> {
-    const { error } = await supabase.from(TABLE).update({ position }).eq('id', id);
+  async reorderAll(ids: string[]): Promise<void> {
+    const { error } = await supabase.rpc('reorder_items', { p_table: TABLE, p_ids: ids });
     if (error) throw error;
     invalidateRefData();
   },

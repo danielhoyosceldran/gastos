@@ -97,7 +97,7 @@ export function TagGroupsPage() {
     const newIdx = sorted.findIndex((x) => x.id === over.id);
     const newOrder = arrayMove(sorted, oldIdx, newIdx);
     setGroups(newOrder.map((x, i) => ({ ...x, position: i })));
-    await Promise.all(newOrder.map((x, i) => tagGroupsService.reorder(x.id, i)));
+    await tagGroupsService.reorderAll(newOrder.map((x) => x.id));
   }
 
   const sorted = [...groups].sort((a, b) => a.position - b.position);

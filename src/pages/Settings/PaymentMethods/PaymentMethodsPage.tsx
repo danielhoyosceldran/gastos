@@ -96,7 +96,7 @@ export function PaymentMethodsPage() {
     const newIdx = sorted.findIndex((x) => x.id === over.id);
     const newOrder = arrayMove(sorted, oldIdx, newIdx);
     setItems(newOrder.map((x, i) => ({ ...x, position: i })));
-    await Promise.all(newOrder.map((x, i) => paymentMethodsService.reorder(x.id, i)));
+    await paymentMethodsService.reorderAll(newOrder.map((x) => x.id));
   }
 
   const sorted = [...items].sort((a, b) => a.position - b.position);

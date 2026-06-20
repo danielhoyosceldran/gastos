@@ -218,7 +218,7 @@ export function CategoriesPage() {
       });
       return updated;
     });
-    await Promise.all(newOrder.map((cat, idx) => categoriesService.reorder(cat.id, idx)));
+    await categoriesService.reorderAll(newOrder.map((cat) => cat.id));
   }
 
   const renderName = (cat: Category) => displayName(cat, t);
