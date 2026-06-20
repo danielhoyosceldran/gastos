@@ -53,9 +53,10 @@ export const expensesService = {
   async create(dto: CreateExpenseDTO): Promise<Expense> {
     const { tag_ids, ...rest } = dto;
     const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
     const { data, error } = await supabase
       .from('expenses')
-      .insert({ ...rest, user_id: user!.id })
+      .insert({ ...rest, user_id: user.id })
       .select(COLS)
       .single();
     if (error) throw error;

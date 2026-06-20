@@ -17,6 +17,7 @@ export interface CreateCategoryDTO {
   name: string;
   color?: string | null;
   icon?: string | null;
+  position?: number;
 }
 
 export interface UpdateCategoryDTO {
