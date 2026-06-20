@@ -146,23 +146,24 @@ export function DashboardPage() {
   }
 
   return (
+    <div className="dashboard-wrapper">
+      <div className="dashboard__month-nav">
+        <button className="btn btn--ghost btn--icon" onClick={prevMonth} aria-label={t('dashboard.prev_month')}><ChevronLeftIcon /></button>
+        <span className="dashboard__month-label">{getMonthLabel(year, month, lang)}</span>
+        <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}><ChevronRightIcon /></button>
+      </div>
+
     <Swiper
       initialSlide={1}
       slidesPerView={1}
       spaceBetween={0}
       onSwiper={(s) => { swiperRef.current = s; }}
       onSlideChangeTransitionEnd={handleSwipeChange}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', flex: 1, minHeight: 0 }}
     >
       <SwiperSlide />
       <SwiperSlide>
     <div className="dashboard">
-      {/* Month nav */}
-      <div className="dashboard__month-nav">
-        <button className="btn btn--ghost btn--icon" onClick={prevMonth} aria-label={t('dashboard.prev_month')}><ChevronLeftIcon /></button>
-        <span className="dashboard__month-label">{getMonthLabel(year, month, lang)}</span>
-        <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}><ChevronRightIcon /></button>
-      </div>
 
       {/* Totals */}
       <div className="dashboard__totals">
@@ -274,5 +275,6 @@ export function DashboardPage() {
       </SwiperSlide>
       <SwiperSlide />
     </Swiper>
+    </div>
   );
 }
