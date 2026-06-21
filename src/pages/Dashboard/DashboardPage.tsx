@@ -3,9 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { displayName } from '../../lib/displayName';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeftIcon, ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
 import { expensesService } from '../../services/supabase/expenses.service';
 import { budgetsService } from '../../services/supabase/budgets.service';
 import type { Expense } from '../../types/expense.types';
@@ -45,7 +42,7 @@ export function DashboardPage() {
   const fd = useExpenseFormData();
   const navigate = useNavigate();
 
-  const swiperRef = useRef<SwiperType | null>(null);
+  const touchStartX = useRef(0);
 
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -98,14 +95,12 @@ export function DashboardPage() {
     else setMonth((m) => m + 1);
   }
 
-  function handleSwipeChange(swiper: SwiperType) {
-    if (swiper.activeIndex === 0) {
-      prevMonth();
-      swiper.slideTo(1, 0);
-    } else if (swiper.activeIndex === 2) {
-      nextMonth();
-      swiper.slideTo(1, 0);
-    }
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+  function handleTouchEnd(e: React.TouchEvent) {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > 50) { if (dx < 0) nextMonth(); else prevMonth(); }
   }
 
   const lang = profile?.language ?? 'en';
@@ -154,16 +149,11 @@ export function DashboardPage() {
         <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}><ChevronRightIcon /></button>
       </div>
 
-    <Swiper
-      initialSlide={1}
-      slidesPerView={1}
-      spaceBetween={0}
-      onSwiper={(s) => { swiperRef.current = s; }}
-      onSlideChangeTransitionEnd={handleSwipeChange}
-      style={{ width: '100%', flex: 1, minHeight: 0 }}
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{ width: '100%', flex: 1, minHeight: 0, overflowY: 'auto' }}
     >
-      <SwiperSlide />
-      <SwiperSlide>
     <div className="dashboard">
 
       {/* Totals */}
@@ -273,9 +263,7 @@ export function DashboardPage() {
         onCancel={() => setDeleteTarget(null)}
       />
     </div>
-      </SwiperSlide>
-      <SwiperSlide />
-    </Swiper>
+    </div>
     </div>
   );
 }

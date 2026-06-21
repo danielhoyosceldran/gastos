@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
 import { useAuthStore } from '../../store/auth.store';
 import { analyticsService } from '../../services/supabase/analytics.service';
 import type { DimensionSlice, TrendPoint, AnalyticsDimension } from '../../types/analytics.types';
@@ -33,7 +30,7 @@ export function AnalyticsPage() {
   const currency = profile?.currency ?? 'EUR';
   const language = profile?.language ?? 'en';
 
-  const swiperRef = useRef<SwiperType | null>(null);
+  const touchStartX = useRef(0);
 
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -57,14 +54,12 @@ export function AnalyticsPage() {
     else setMonth((m) => m + 1);
   }
 
-  function handleSwipeChange(swiper: SwiperType) {
-    if (swiper.activeIndex === 0) {
-      prevMonth();
-      swiper.slideTo(1, 0);
-    } else if (swiper.activeIndex === 2) {
-      nextMonth();
-      swiper.slideTo(1, 0);
-    }
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+  function handleTouchEnd(e: React.TouchEvent) {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > 50) { if (dx < 0) nextMonth(); else prevMonth(); }
   }
 
   const load = useCallback(async () => {
@@ -96,47 +91,40 @@ export function AnalyticsPage() {
         <button className="btn btn--ghost btn--icon" onClick={nextMonth} aria-label={t('dashboard.next_month')}><ChevronRightIcon /></button>
       </div>
 
-      <Swiper
-        initialSlide={1}
-        slidesPerView={1}
-        spaceBetween={0}
-        onSwiper={(s) => { swiperRef.current = s; }}
-        onSlideChangeTransitionEnd={handleSwipeChange}
-        style={{ width: '100%', flex: 1, minHeight: 0 }}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{ width: '100%', flex: 1, minHeight: 0, overflowY: 'auto' }}
       >
-        <SwiperSlide />
-        <SwiperSlide>
-          <div className="analytics-page">
-            <header className="analytics-page__header">
-              <h1 className="analytics-page__title">{t('analytics.title')}</h1>
-            </header>
+        <div className="analytics-page">
+          <header className="analytics-page__header">
+            <h1 className="analytics-page__title">{t('analytics.title')}</h1>
+          </header>
 
-            <section className="analytics-page__grid">
-              {DIMENSIONS.map((dim) => (
-                <DimensionChart
-                  key={dim}
-                  title={t(`analytics.dim_${dim}`)}
-                  data={dimData[dim]}
-                  currency={currency}
-                  language={language}
-                  loading={loading}
-                  emptyKey={`analytics.empty_${dim}`}
-                />
-              ))}
-            </section>
-
-            <section className="analytics-page__trend">
-              <TrendChart
-                data={trendData}
+          <section className="analytics-page__grid">
+            {DIMENSIONS.map((dim) => (
+              <DimensionChart
+                key={dim}
+                title={t(`analytics.dim_${dim}`)}
+                data={dimData[dim]}
                 currency={currency}
                 language={language}
                 loading={loading}
+                emptyKey={`analytics.empty_${dim}`}
               />
-            </section>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide />
-      </Swiper>
+            ))}
+          </section>
+
+          <section className="analytics-page__trend">
+            <TrendChart
+              data={trendData}
+              currency={currency}
+              language={language}
+              loading={loading}
+            />
+          </section>
+        </div>
+      </div>
     </div>
   );
 }
