@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@/styles/variables' as *;
 
 .pwa-banner {
@@ -54,11 +55,11 @@
     white-space: nowrap;
 
     &:hover {
-      background: lighten(#4F88DB, 8%);
+      background: color.adjust(#4F88DB, $lightness: 8%);
     }
 
     &:active {
-      background: darken(#4F88DB, 4%);
+      background: color.adjust(#4F88DB, $lightness: -4%);
     }
   }
 
