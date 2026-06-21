@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { displayName } from '../../lib/displayName';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { expensesService } from '../../services/supabase/expenses.service';
 import { categoriesService } from '../../services/supabase/categories.service';
 import { tagsService } from '../../services/supabase/tags.service';
@@ -156,6 +154,10 @@ export function ExportPage() {
       if (!result) { toast.warning(t('export.no_data')); return; }
       const { rows, headers } = result;
 
+      const [{ default: jsPDF }, { default: autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+      ]);
       const doc = new jsPDF({ orientation: 'landscape' });
       doc.setFontSize(14);
       doc.text(t('export.title'), 14, 16);
