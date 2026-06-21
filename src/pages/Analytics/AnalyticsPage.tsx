@@ -11,13 +11,6 @@ import './AnalyticsPage.scss';
 
 const DIMENSIONS: AnalyticsDimension[] = ['category', 'tag', 'project', 'event'];
 
-function toDateStr(year: number, month: number, day: number): string {
-  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-}
-
-function lastDayOf(year: number, month: number): number {
-  return new Date(year, month, 0).getDate();
-}
 
 function getMonthLabel(year: number, month: number, language: string): string {
   return new Intl.DateTimeFormat(language, { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
@@ -42,8 +35,11 @@ export function AnalyticsPage() {
   const [trendData, setTrendData] = useState<TrendPoint[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const from = toDateStr(year, month, 1);
-  const to   = toDateStr(year, month, lastDayOf(year, month));
+  type AnalyticsCache = {
+    dimData: Record<AnalyticsDimension, DimensionSlice[]>;
+    trendData: TrendPoint[];
+  };
+  const analyticsCache = useRef<Map<string, AnalyticsCache>>(new Map());
 
   function prevMonth() {
     if (month === 1) { setYear((y) => y - 1); setMonth(12); }
@@ -62,26 +58,50 @@ export function AnalyticsPage() {
     if (Math.abs(dx) > 50) { if (dx < 0) nextMonth(); else prevMonth(); }
   }
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  function monthKey(y: number, m: number) { return `${y}-${m}`; }
+  function adjMonths(y: number, m: number) {
+    const prev = m === 1  ? [y - 1, 12] : [y, m - 1];
+    const next = m === 12 ? [y + 1,  1] : [y, m + 1];
+    return [prev, next] as [number, number][];
+  }
+  function toRange(y: number, m: number) {
+    const last = new Date(y, m, 0).getDate();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return { from: `${y}-${pad(m)}-01`, to: `${y}-${pad(m)}-${last}` };
+  }
+
+  const fetchAnalytics = useCallback(async (y: number, m: number, show: boolean) => {
+    const key = monthKey(y, m);
+    if (analyticsCache.current.has(key)) {
+      if (show) {
+        const cached = analyticsCache.current.get(key)!;
+        setDimData(cached.dimData);
+        setTrendData(cached.trendData);
+        setLoading(false);
+      }
+      return;
+    }
+    if (show) setLoading(true);
+    const { from: f, to: t2 } = toRange(y, m);
     try {
       const [cat, tag, project, event, trend] = await Promise.all([
-        analyticsService.getByDimension('category', currency, from, to),
-        analyticsService.getByDimension('tag',      currency, from, to),
-        analyticsService.getByDimension('project',  currency, from, to),
-        analyticsService.getByDimension('event',    currency, from, to),
-        analyticsService.getOverTime(currency, from, to),
+        analyticsService.getByDimension('category', currency, f, t2),
+        analyticsService.getByDimension('tag',      currency, f, t2),
+        analyticsService.getByDimension('project',  currency, f, t2),
+        analyticsService.getByDimension('event',    currency, f, t2),
+        analyticsService.getOverTime(currency, f, t2),
       ]);
-      setDimData({ category: cat, tag, project, event });
-      setTrendData(trend);
-    } catch {
-      toast.error(t('common.error_load'));
-    } finally {
-      setLoading(false);
-    }
-  }, [currency, from, to, t]);
+      const result: AnalyticsCache = { dimData: { category: cat, tag, project, event }, trendData: trend };
+      analyticsCache.current.set(key, result);
+      if (show) { setDimData(result.dimData); setTrendData(result.trendData); }
+    } catch { if (show) toast.error(t('common.error_load')); }
+    finally { if (show) setLoading(false); }
+  }, [currency, t]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    fetchAnalytics(year, month, true);
+    for (const [y, m] of adjMonths(year, month)) fetchAnalytics(y, m, false);
+  }, [year, month, fetchAnalytics]);
 
   return (
     <div className="analytics-wrapper">

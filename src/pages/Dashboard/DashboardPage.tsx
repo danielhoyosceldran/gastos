@@ -56,35 +56,61 @@ export function DashboardPage() {
   const [activeBudgets, setActiveBudgets] = useState<Budget[]>([]);
   const [budgetsLoading, setBudgetsLoading] = useState(true);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try { setExpenses(await expensesService.getByMonth(year, month)); }
-    catch { toast.error(t('common.error_load')); }
-    finally { setLoading(false); }
-  }, [year, month, t]);
+  const expenseCache = useRef<Map<string, Expense[]>>(new Map());
+  const budgetCache = useRef<Map<string, Budget[]>>(new Map());
 
-  const loadBudgets = useCallback(async () => {
-    setBudgetsLoading(true);
+  function monthKey(y: number, m: number) { return `${y}-${m}`; }
+  function adjMonths(y: number, m: number) {
+    const prev = m === 1  ? [y - 1, 12] : [y, m - 1];
+    const next = m === 12 ? [y + 1,  1] : [y, m + 1];
+    return [prev, next] as [number, number][];
+  }
+
+  const fetchExpenses = useCallback(async (y: number, m: number, show: boolean) => {
+    const key = monthKey(y, m);
+    if (expenseCache.current.has(key)) {
+      if (show) { setExpenses(expenseCache.current.get(key)!); setLoading(false); }
+      return;
+    }
+    if (show) setLoading(true);
+    try {
+      const data = await expensesService.getByMonth(y, m);
+      expenseCache.current.set(key, data);
+      if (show) setExpenses(data);
+    } catch { if (show) toast.error(t('common.error_load')); }
+    finally { if (show) setLoading(false); }
+  }, [t]);
+
+  const fetchBudgets = useCallback(async (y: number, m: number, show: boolean) => {
+    const key = monthKey(y, m);
+    if (budgetCache.current.has(key)) {
+      if (show) { setActiveBudgets(budgetCache.current.get(key)!); setBudgetsLoading(false); }
+      return;
+    }
+    if (show) setBudgetsLoading(true);
     try {
       const all = await budgetsService.getAll();
-      const active = all.filter((b) => isBudgetActive(b, year, month));
+      const active = all.filter((b) => isBudgetActive(b, y, m));
       const withProgress = await Promise.all(
         active.map(async (b) => {
-          try {
-            const spent = await budgetsService.getProgress(b.id, year, month);
-            return { ...b, spent };
-          } catch {
-            return { ...b, spent: 0 };
-          }
+          try { return { ...b, spent: await budgetsService.getProgress(b.id, y, m) }; }
+          catch { return { ...b, spent: 0 }; }
         })
       );
-      setActiveBudgets(withProgress);
-    } catch { /* silent — budgets are secondary */ }
-    finally { setBudgetsLoading(false); }
-  }, [year, month]);
+      budgetCache.current.set(key, withProgress);
+      if (show) setActiveBudgets(withProgress);
+    } catch { /* silent */ }
+    finally { if (show) setBudgetsLoading(false); }
+  }, []);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { loadBudgets(); }, [loadBudgets]);
+  useEffect(() => {
+    fetchExpenses(year, month, true);
+    fetchBudgets(year, month, true);
+    for (const [y, m] of adjMonths(year, month)) {
+      fetchExpenses(y, m, false);
+      fetchBudgets(y, m, false);
+    }
+  }, [year, month, fetchExpenses, fetchBudgets]);
 
   function prevMonth() {
     if (month === 1) { setYear((y) => y - 1); setMonth(12); }
